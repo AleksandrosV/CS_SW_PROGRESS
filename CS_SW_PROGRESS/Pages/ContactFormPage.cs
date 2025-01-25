@@ -14,6 +14,7 @@ namespace CS_SW_PROGRESS.Pages
         private By phoneField = By.Id("Textbox-5");
         private By stateDropdown = By.Id("State-1");
         private By messageField = By.Id("Textarea-1");
+        private By contactSalesBtn = By.CssSelector("button[type='submit']");
         private readonly By headerText = By.CssSelector("h1.-mb2.-tac");
 
         public string GetHeaderText()
@@ -32,6 +33,16 @@ namespace CS_SW_PROGRESS.Pages
             var labelLocator = By.CssSelector($"label[for='{forAttribute}']");
             var labelElement = Driver.FindElement(labelLocator);
             return labelElement.GetAttribute("class").Contains("required");
+        }
+
+        public void ClickContactSalesBtn()
+        {
+            ClickElement(contactSalesBtn);
+        }
+        public string GetErrorMessageByText(string forAttribute)
+        {
+            var errorMessageLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']");
+            return GetText(errorMessageLocator);
         }
     }
 }

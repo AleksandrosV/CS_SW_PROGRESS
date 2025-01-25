@@ -1,5 +1,4 @@
 ﻿using CS_SW_PROGRESS.Pages;
-using OpenQA.Selenium;
 namespace CS_SW_PROGRESS.Tests
 {
     public class ContactFormTests : TestBase
@@ -38,6 +37,17 @@ namespace CS_SW_PROGRESS.Tests
                 string forAttribute = field.Value;
                 bool isLabelRequired = _contactFormPage.IsLabelRequired(forAttribute);
                 Assert.That(isLabelRequired, Is.True, $"The label for {field.Key} does not have the 'required' class.");
+            }
+        }
+
+        [Test]
+        public void VerifyErrorRequiredFieldMessages()
+        {
+            _contactFormPage.ClickContactSalesBtn();
+            foreach (var field in Configuration.ExpectedErrorMessages)
+            {
+                string actualErrorMessage = _contactFormPage.GetErrorMessageByText(field.Value);
+                Assert.That(actualErrorMessage, Is.EqualTo(field.Value), $"The error message for '{field.Key}' does not match the expected '{field.Value}'.");
             }
         }
     }

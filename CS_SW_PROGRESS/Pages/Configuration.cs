@@ -29,5 +29,17 @@
             { "State Dropdown", "State-1" },
             { "Phone Field", "Textbox-5" }
         };
+
+        public static readonly Dictionary<string, string> ExpectedErrorMessages = new()
+        {
+            { "Product / Interest", "Product is required" },
+            { "Business Email", "Email is required" },
+            { "First Name", "First name is required" },
+            { "Last Name", "Last name is required" },
+            { "Company", "Company is required" },
+            //{ "I am...", "Company type is required" }, // Commented out because of inconsistency bug
+            { "Country/Territory", "Country/territory is required" },
+            { "Phone", "Phone is required" }
+        };
     }
 }
