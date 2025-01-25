@@ -13,9 +13,20 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void ExampleTest()
+        public void VerifyHeaderText()
         {
-            Driver.Navigate().Refresh();
+            string actualHeaderText = _contactFormPage.GetHeaderText();
+            Assert.That(actualHeaderText, Is.EqualTo(Configuration.HeaderText), "The header text does not match the expected value.");
+        }
+
+        [Test]
+        public void VerifyAllLabelsText()
+        {
+            foreach (var label in Configuration.ExpectedLabels)
+            {
+                string actualLabelText = _contactFormPage.GetLabelTextByForAttribute(label.Key);
+                Assert.That(actualLabelText, Is.EqualTo(label.Value), $"The label text for '{label.Key}' does not match the expected '{label.Value}'.");
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ namespace CS_SW_PROGRESS.Pages
             chromeOptions.AddArgument("--start-maximized"); // Open browser in maximized mode
             chromeOptions.AddArgument("--disable-extensions"); // Disable browser extensions
             chromeOptions.AddArgument("--disable-popup-blocking"); // Disable popups
+            chromeOptions.AddArgument("--disable-blink-features=AutomationControlled"); // Disable automation control (cookie banner)
 
             Driver = new ChromeDriver(chromeOptions);
 

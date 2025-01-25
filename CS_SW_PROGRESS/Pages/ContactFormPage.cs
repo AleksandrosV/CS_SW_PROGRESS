@@ -13,5 +13,17 @@ namespace CS_SW_PROGRESS.Pages
         private By countryDropdown = By.Id("Country-1");
         private By messageField = By.Id("Textarea-1");
         private By phoneField = By.Id("Textbox-5");
+        private readonly By headerText = By.CssSelector("h1.-mb2.-tac");
+
+        public string GetHeaderText()
+        {
+            return GetText(headerText);
+        }
+
+        public string GetLabelTextByForAttribute(string forAttribute)
+        {
+            var labelLocator = By.CssSelector($"label[for='{forAttribute}']");
+            return GetText(labelLocator);
+        }
     }
 }
