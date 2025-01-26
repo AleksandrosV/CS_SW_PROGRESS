@@ -327,5 +327,90 @@
             { "Dropdown-2", "I am..." },
             { "Country-1", "Country/Territory" }
         };
+
+        // Data for countries without state dropdowns for example
+        public static readonly List<string> CountriesWithoutStateDropdown = ["Venezuela", "Tuvalu"];
+
+        public static readonly Dictionary<string, List<string>> StateOptions = new()
+        {
+            { "Canada", new List<string> {
+                "Select:",
+                "Alberta",
+                "British Columbia",
+                "Manitoba",
+                "New Brunswick",
+                "Newfoundland and Labrador",
+                "Northwest Territories",
+                "Nova Scotia",
+                "Nunavut",
+                "Ontario",
+                "Prince Edward Island",
+                "Quebec",
+                "Saskatchewan",
+                "Yukon" } },
+            { "USA", new List<string> {
+                "Select:",
+                "Alabama",
+                "Alaska",
+                "Arizona",
+                "Arkansas",
+                "California",
+                "Colorado",
+                "Connecticut",
+                "Delaware",
+                "District of Columbia",
+                "Florida",
+                "Georgia",
+                "Hawaii",
+                "Idaho",
+                "Illinois",
+                "Indiana",
+                "Iowa",
+                "Kansas",
+                "Kentucky",
+                "Louisiana",
+                "Maine",
+                "Maryland",
+                "Massachusetts",
+                "Michigan",
+                "Minnesota",
+                "Mississippi",
+                "Missouri",
+                "Montana",
+                "Nebraska",
+                "Nevada",
+                "New Hampshire",
+                "New Jersey",
+                "New Mexico",
+                "New York",
+                "North Carolina",
+                "North Dakota",
+                "Ohio",
+                "Oklahoma",
+                "Oregon",
+                "Pennsylvania",
+                "Puerto Rico",
+                "Rhode Island",
+                "South Carolina",
+                "South Dakota",
+                "Tennessee",
+                "Texas",
+                "US ARMY EUROPE",
+                "Utah",
+                "Vermont",
+                "Virgin Islands",
+                "Virginia",
+                "Washington",
+                "West Virginia",
+                "Wisconsin",
+                "Wyoming" } }
+        };
+
+        public static readonly Dictionary<string, string> CountriesWithStateDropdownLabels = new()
+        {
+            { "Canada", "State-1" },
+            { "USA", "State-1" }
+        };
+
     }
 }

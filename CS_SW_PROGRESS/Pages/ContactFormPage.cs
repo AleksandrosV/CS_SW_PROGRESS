@@ -64,5 +64,34 @@ namespace CS_SW_PROGRESS.Pages
             }
             return options;
         }
+
+        public void SelectDropdownValue(By dropdownLocator, string value)
+        {
+            var dropdownElement = Driver.FindElement(dropdownLocator);
+            var selectElement = new SelectElement(dropdownElement);
+            selectElement.SelectByText(value);
+        }
+
+        public new bool IsElementDisplayed(By locator)
+        {
+            try
+            {
+                return Driver.FindElement(locator).Displayed;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+        }
+
+        public void SelectCountry(string country)
+        {
+            SelectDropdownValue(countryDropdown, country);
+        }
+
+        public bool IsStateDropdownDisplayed()
+        {
+            return IsElementDisplayed(stateDropdown);
+        }
     }
 }

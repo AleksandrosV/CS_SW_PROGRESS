@@ -73,6 +73,37 @@ namespace CS_SW_PROGRESS.Tests
                 CollectionAssert.AreEqual(dropdown.Value, actualOptions, $"The options for dropdown '{dropdownLabel}' do not match the expected options.");
             }
         }
+
+        [Test]
+        public void VerifyDefaultDropdownValuesDisplayedForCountriesWithStates()
+        {
+            foreach (var country in Configuration.CountriesWithStateDropdownLabels)
+            {
+                _contactFormPage.SelectCountry(country.Key);
+                Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.True, $"The 'State' field is not displayed when '{country}' is selected.");
+            }
+        }
+
+        [Test]
+        public void VerifyStateDropdownOptionsForCountriesWithStates()
+        {
+            foreach (var country in Configuration.CountriesWithStateDropdownLabels)
+            {
+                _contactFormPage.SelectCountry(country.Key);
+                List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(country.Value));
+                CollectionAssert.AreEqual(Configuration.StateOptions[country.Key], actualOptions, $"The options for the 'State' dropdown when '{country.Key}' is selected do not match the expected options.");
+            }
+        }
+
+        [Test]
+        public void VerifyStateFieldNotDisplayedForCountriesWithoutStates()
+        {
+            foreach (var country in Configuration.CountriesWithoutStateDropdown)
+            {
+                _contactFormPage.SelectCountry(country);
+                Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.False, $"The 'State' field is displayed when '{country}' is selected.");
+            }
+        }
     }
 }
 
