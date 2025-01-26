@@ -328,7 +328,7 @@
             { "Country-1", "Country/Territory" }
         };
 
-        // Data for countries without state dropdowns for example
+        // Data for countries without state dropdowns for example, we can add more countries
         public static readonly List<string> CountriesWithoutStateDropdown = ["Venezuela", "Tuvalu"];
 
         public static readonly Dictionary<string, List<string>> StateOptions = new()
@@ -410,6 +410,21 @@
         {
             { "Canada", "State-1" },
             { "USA", "State-1" }
+        };
+
+        // Here we can add more countries and their phone codes
+        public static readonly Dictionary<string, string> CountryPhoneCodes = new()
+        {
+            { "USA", "" },
+            { "Canada", "+1 " },
+            { "Bulgaria", "+359 " }
+        };
+
+        public static readonly Dictionary<string, string> DisclaimerLinks = new()
+        {
+            { "Partners", "https://www.progress.com/partners/partner-locator" },
+            { "Privacy Policy", "https://www.progress.com/legal/privacy-policy" },
+            { "here", "https://forms.progress.com/SubscriptionMgt-English" }
         };
 
     }

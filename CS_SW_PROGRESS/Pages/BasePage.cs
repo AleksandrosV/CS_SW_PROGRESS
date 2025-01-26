@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 
 namespace CS_SW_PROGRESS.Pages
 {
@@ -22,20 +21,5 @@ namespace CS_SW_PROGRESS.Pages
             return Driver.FindElement(locator).Text;
         }
 
-        protected bool IsElementDisplayed(By locator)
-        {
-            return Driver.FindElement(locator).Displayed;
-        }
-
-        protected void RefreshPage()
-        {
-            Driver.Navigate().Refresh();
-        }
-
-        protected void WaitForElementVisible(By locator, int timeoutInSeconds = 10)
-        {
-            WebDriverWait wait = new(Driver, TimeSpan.FromSeconds(timeoutInSeconds));
-            wait.Until(driver => driver.FindElement(locator).Displayed);
-        }
     }
 }

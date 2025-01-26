@@ -72,7 +72,7 @@ namespace CS_SW_PROGRESS.Pages
             selectElement.SelectByText(value);
         }
 
-        public new bool IsElementDisplayed(By locator)
+        public bool IsElementDisplayed(By locator)
         {
             try
             {
@@ -92,6 +92,26 @@ namespace CS_SW_PROGRESS.Pages
         public bool IsStateDropdownDisplayed()
         {
             return IsElementDisplayed(stateDropdown);
+        }
+
+        public string GetPhoneNumberCode()
+        {
+            var phoneElement = Driver.FindElement(phoneField);
+            return phoneElement.GetAttribute("value");
+        }
+
+        public void SelectRandomCountry()
+        {
+            var countryOptions = GetDropdownOptions(countryDropdown);
+            Random random = new();
+            string randomCountry = countryOptions[random.Next(countryOptions.Count)];
+            SelectDropdownValue(countryDropdown, randomCountry);
+        }
+
+        public void ClickDisclaimerLink(string linkText)
+        {
+            By linkLocator = By.LinkText(linkText);
+            ClickElement(linkLocator);
         }
     }
 }

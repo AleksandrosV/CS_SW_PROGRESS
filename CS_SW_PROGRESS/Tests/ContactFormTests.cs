@@ -104,6 +104,34 @@ namespace CS_SW_PROGRESS.Tests
                 Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.False, $"The 'State' field is displayed when '{country}' is selected.");
             }
         }
+
+        [Test]
+        public void VerifyPhoneNumberCodeForSelectedCountries()
+        {
+            foreach (var country in Configuration.CountryPhoneCodes)
+            {
+                _contactFormPage.SelectCountry(country.Key);
+                string actualPhoneNumberCode = _contactFormPage.GetPhoneNumberCode();
+                Assert.That(actualPhoneNumberCode, Is.EqualTo(country.Value), $"The phone number code for '{country.Key}' does not match the expected '{country.Value}'.");
+            }
+        }
+
+        [Test]
+        public void VerifyDisclaimerLinks()
+        {
+            _contactFormPage.SelectRandomCountry();
+            foreach (var link in Configuration.DisclaimerLinks)
+            {
+                string linkText = link.Key;
+                string expectedUrl = link.Value;
+                _contactFormPage.ClickDisclaimerLink(linkText);
+                Driver.SwitchTo().Window(Driver.WindowHandles.Last());
+                string actualUrl = Driver.Url;
+                Assert.That(actualUrl, Is.EqualTo(expectedUrl), $"The URL for '{linkText}' does not match the expected '{expectedUrl}'.");
+                Driver.Close();
+                Driver.SwitchTo().Window(Driver.WindowHandles.First());
+            }
+        }
     }
 }
 
