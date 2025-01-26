@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace CS_SW_PROGRESS.Pages
 {
@@ -22,7 +23,7 @@ namespace CS_SW_PROGRESS.Pages
             return GetText(headerText);
         }
 
-        public string GetLabelTextByForAttribute(string forAttribute)
+        public string GetLabelText(string forAttribute)
         {
             var labelLocator = By.CssSelector($"label[for='{forAttribute}']");
             return GetText(labelLocator);
@@ -39,10 +40,29 @@ namespace CS_SW_PROGRESS.Pages
         {
             ClickElement(contactSalesBtn);
         }
-        public string GetErrorMessageByText(string forAttribute)
+        public string GetErrorMessage(string forAttribute)
         {
             var errorMessageLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']");
             return GetText(errorMessageLocator);
+        }
+
+        public string GetSelectedDropdownValue(By dropdownLocator)
+        {
+            var dropdownElement = Driver.FindElement(dropdownLocator);
+            var selectElement = new SelectElement(dropdownElement);
+            return selectElement.SelectedOption.Text;
+        }
+
+        public List<string> GetDropdownOptions(By dropdownLocator)
+        {
+            var dropdownElement = Driver.FindElement(dropdownLocator);
+            var selectElement = new SelectElement(dropdownElement);
+            var options = new List<string>();
+            foreach (var option in selectElement.Options)
+            {
+                options.Add(option.Text);
+            }
+            return options;
         }
     }
 }

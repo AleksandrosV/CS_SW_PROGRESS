@@ -1,4 +1,5 @@
 ﻿using CS_SW_PROGRESS.Pages;
+using OpenQA.Selenium;
 namespace CS_SW_PROGRESS.Tests
 {
     public class ContactFormTests : TestBase
@@ -16,7 +17,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyHeaderText()
         {
             string actualHeaderText = _contactFormPage.GetHeaderText();
-            Assert.That(actualHeaderText, Is.EqualTo(Configuration.HeaderText), "The header text does not match the expected value.");
+            Assert.That(actualHeaderText, Is.EqualTo(Configuration.ContactFormHeader), "The header text does not match the expected value.");
         }
 
         [Test]
@@ -24,7 +25,7 @@ namespace CS_SW_PROGRESS.Tests
         {
             foreach (var label in Configuration.ExpectedLabels)
             {
-                string actualLabelText = _contactFormPage.GetLabelTextByForAttribute(label.Key);
+                string actualLabelText = _contactFormPage.GetLabelText(label.Key);
                 Assert.That(actualLabelText, Is.EqualTo(label.Value), $"The label text for '{label.Key}' does not match the expected '{label.Value}'.");
             }
         }
@@ -46,8 +47,30 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.ClickContactSalesBtn();
             foreach (var field in Configuration.ExpectedErrorMessages)
             {
-                string actualErrorMessage = _contactFormPage.GetErrorMessageByText(field.Value);
+                string actualErrorMessage = _contactFormPage.GetErrorMessage(field.Value);
                 Assert.That(actualErrorMessage, Is.EqualTo(field.Value), $"The error message for '{field.Key}' does not match the expected '{field.Value}'.");
+            }
+        }
+
+        [Test]
+        public void VerifyDefaultDropdownValues()
+        {
+            foreach (var dropdown in Configuration.ExpectedDropdownDefaults)
+            {
+                string actualDropdownValue = _contactFormPage.GetSelectedDropdownValue(By.Id(dropdown.Key));
+                string dropdownLabel = Configuration.DropdownLabels[dropdown.Key];
+                Assert.That(actualDropdownValue, Is.EqualTo(dropdown.Value), $"The default value for dropdown '{dropdownLabel}' does not match the expected value.");
+            }
+        }
+
+        [Test]
+        public void VerifyDropdownOptions()
+        {
+            foreach (var dropdown in Configuration.ExpectedDropdownOptions)
+            {
+                List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown.Key));
+                string dropdownLabel = Configuration.DropdownLabels[dropdown.Key];
+                CollectionAssert.AreEqual(dropdown.Value, actualOptions, $"The options for dropdown '{dropdownLabel}' do not match the expected options.");
             }
         }
     }
