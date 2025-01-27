@@ -40,6 +40,7 @@ namespace CS_SW_PROGRESS.Pages
         {
             ClickElement(contactSalesBtn);
         }
+
         public string GetErrorMessage(string forAttribute)
         {
             var errorMessageLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']");
@@ -57,12 +58,7 @@ namespace CS_SW_PROGRESS.Pages
         {
             var dropdownElement = Driver.FindElement(dropdownLocator);
             var selectElement = new SelectElement(dropdownElement);
-            var options = new List<string>();
-            foreach (var option in selectElement.Options)
-            {
-                options.Add(option.Text);
-            }
-            return options;
+            return selectElement.Options.Select(option => option.Text).ToList();
         }
 
         public void SelectDropdownValue(By dropdownLocator, string value)
@@ -70,18 +66,6 @@ namespace CS_SW_PROGRESS.Pages
             var dropdownElement = Driver.FindElement(dropdownLocator);
             var selectElement = new SelectElement(dropdownElement);
             selectElement.SelectByText(value);
-        }
-
-        public bool IsElementDisplayed(By locator)
-        {
-            try
-            {
-                return Driver.FindElement(locator).Displayed;
-            }
-            catch (NoSuchElementException)
-            {
-                return false;
-            }
         }
 
         public void SelectCountry(string country)
@@ -96,8 +80,7 @@ namespace CS_SW_PROGRESS.Pages
 
         public string GetPhoneNumberCode()
         {
-            var phoneElement = Driver.FindElement(phoneField);
-            return phoneElement.GetAttribute("value");
+            return Driver.FindElement(phoneField).GetAttribute("value");
         }
 
         public void SelectRandomCountry()

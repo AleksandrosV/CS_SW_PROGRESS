@@ -42,13 +42,6 @@
             { "Phone", "Phone is required" }
         };
 
-        public static readonly Dictionary<string, string> ExpectedDropdownDefaults = new()
-        {
-            { "Dropdown-1", "Select product" },
-            { "Dropdown-2", "Select company type" },
-            { "Country-1", "Select country/territory" }
-        };
-
         public static readonly Dictionary<string, List<string>> ExpectedDropdownOptions = new()
         {
             { "Dropdown-1", new List<string> {
@@ -84,16 +77,6 @@
                 "Western Sahara", "Yemen", "Zambia", "Zimbabwe" } }
         };
 
-        public static readonly Dictionary<string, string> DropdownLabels = new()
-        {
-            { "Dropdown-1", "Product / interest" },
-            { "Dropdown-2", "I am..." },
-            { "Country-1", "Country/Territory" }
-        };
-
-        // Data for countries without state dropdowns for example, we can add more countries
-        public static readonly List<string> CountriesWithoutStateDropdown = ["Venezuela", "Tuvalu"];
-
         public static readonly Dictionary<string, List<string>> StateOptions = new()
         {
             { "Canada", new List<string> {
@@ -106,20 +89,6 @@
                 "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Puerto Rico", "Rhode Island",
                 "South Carolina", "South Dakota", "Tennessee", "Texas", "US ARMY EUROPE", "Utah", "Vermont", "Virgin Islands", "Virginia", "Washington",
                 "West Virginia", "Wisconsin", "Wyoming" } }
-        };
-
-        public static readonly Dictionary<string, string> CountriesWithStateDropdownLabels = new()
-        {
-            { "Canada", "State-1" },
-            { "USA", "State-1" }
-        };
-
-        // Here we can add more countries and their phone codes
-        public static readonly Dictionary<string, string> CountryPhoneCodes = new()
-        {
-            { "USA", "" },
-            { "Canada", "+1 " },
-            { "Bulgaria", "+359 " }
         };
 
         public static readonly Dictionary<string, string> DisclaimerLinks = new()

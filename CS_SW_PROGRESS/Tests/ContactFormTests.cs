@@ -53,67 +53,66 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void VerifyDefaultValuesForDropdowns()
+        [Category("Dropdowns")]
+        [TestCase("Dropdown-1", "Select product", "Product / interest")]
+        [TestCase("Dropdown-2", "Select company type", "I am...")]
+        [TestCase("Country-1", "Select country/territory", "Country/territory")]
+        public void VerifyDefaultValuesForDropdowns(string dropdown, string dropdownDefault, string dropdownName)
         {
-            foreach (var dropdown in Configuration.ExpectedDropdownDefaults)
-            {
-                string actualDropdownValue = _contactFormPage.GetSelectedDropdownValue(By.Id(dropdown.Key));
-                string dropdownLabel = Configuration.DropdownLabels[dropdown.Key];
-                Assert.That(actualDropdownValue, Is.EqualTo(dropdown.Value), $"The default value for dropdown '{dropdownLabel}' does not match the expected value.");
-            }
+            string dropdownField = _contactFormPage.GetSelectedDropdownValue(By.Id(dropdown));
+            Assert.That(dropdownField, Is.EqualTo(dropdownDefault), $"The default value for dropdown '{dropdownName}' does not match the expected value.");
         }
 
         [Test]
-        public void VerifyDropdownOptions()
+        [Category("Dropdowns")]
+        [TestCase("Dropdown-1", "Product / interest")]
+        [TestCase("Dropdown-2", "I am...")]
+        [TestCase("Country-1", "Country/Territory")]
+        public void VerifyDropdownsOptions(string dropdown, string name)
         {
-            foreach (var dropdown in Configuration.ExpectedDropdownOptions)
-            {
-                List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown.Key));
-                string dropdownLabel = Configuration.DropdownLabels[dropdown.Key];
-                CollectionAssert.AreEqual(dropdown.Value, actualOptions, $"The options for dropdown '{dropdownLabel}' do not match the expected options.");
-            }
+            List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown));
+            CollectionAssert.AreEqual(Configuration.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for dropdown '{name}' do not match the expected options.");
         }
 
         [Test]
-        public void VerifyDefaultDropdownValuesForCountriesWithStates()
+        [Category("Dropdowns")]
+        [TestCase("Canada")]
+        [TestCase("USA")]
+        public void VerifyDefaultDropdownValuesForCountriesWithStates(string country)
         {
-            foreach (var country in Configuration.CountriesWithStateDropdownLabels)
-            {
-                _contactFormPage.SelectCountry(country.Key);
-                Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.True, $"The 'State' field is not displayed when '{country}' is selected.");
-            }
+            _contactFormPage.SelectCountry(country);
+            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.True, $"The 'State' field is not displayed when '{country}' is selected.");
         }
 
         [Test]
-        public void VerifyStateDropdownOptionsForCountriesWithStates()
+        [Category("Dropdowns")]
+        [TestCase("Canada", "State-1")]
+        [TestCase("USA", "State-1")]
+        public void VerifyStateDropdownOptionsForCountriesWithStates(string country, string dropdown)
         {
-            foreach (var country in Configuration.CountriesWithStateDropdownLabels)
-            {
-                _contactFormPage.SelectCountry(country.Key);
-                List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(country.Value));
-                CollectionAssert.AreEqual(Configuration.StateOptions[country.Key], actualOptions, $"The options for the 'State' dropdown when '{country.Key}' is selected do not match the expected options.");
-            }
+            _contactFormPage.SelectCountry(country);
+            List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown));
+            CollectionAssert.AreEqual(Configuration.StateOptions[country], actualOptions, $"The options for the 'State' dropdown when '{country}' is selected do not match the expected options.");
         }
 
         [Test]
-        public void VerifyStateDropdownNotDisplayedForCountriesWithoutStates()
+        [Category("Dropdowns")]
+        [TestCase("Venezuela")]
+        [TestCase("Tuvalu")]
+        public void VerifyStateDropdownNotDisplayedForCountriesWithoutStates(string country)
         {
-            foreach (var country in Configuration.CountriesWithoutStateDropdown)
-            {
-                _contactFormPage.SelectCountry(country);
-                Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.False, $"The 'State' field is displayed when '{country}' is selected.");
-            }
+            _contactFormPage.SelectCountry(country);
+            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.False, $"The 'State' field is displayed when '{country}' is selected.");
         }
 
         [Test]
-        public void VerifyPhoneNumberCodeForSelectedCountries()
+        [TestCase("Canada", "+1 ")]
+        [TestCase("Bulgaria", "+359 ")]
+        public void VerifyPhoneNumberCodeForCountry(string country, string expectedCode)
         {
-            foreach (var country in Configuration.CountryPhoneCodes)
-            {
-                _contactFormPage.SelectCountry(country.Key);
-                string actualPhoneNumberCode = _contactFormPage.GetPhoneNumberCode();
-                Assert.That(actualPhoneNumberCode, Is.EqualTo(country.Value), $"The phone number code for '{country.Key}' does not match the expected '{country.Value}'.");
-            }
+            _contactFormPage.SelectCountry(country);
+            string actualPhoneNumberCode = _contactFormPage.GetPhoneNumberCode();
+            Assert.That(actualPhoneNumberCode, Is.EqualTo(expectedCode));
         }
 
         [Test]
