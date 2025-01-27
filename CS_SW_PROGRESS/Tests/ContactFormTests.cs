@@ -17,11 +17,11 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyHeaderText()
         {
             string actualHeaderText = _contactFormPage.GetHeaderText();
-            Assert.That(actualHeaderText, Is.EqualTo(Configuration.ContactFormHeader), "The header text does not match the expected value.");
+            Assert.That(actualHeaderText, Is.EqualTo(Configuration.ContactFormHeader), $"The header text does not match the expected '{Configuration.ContactFormHeader}'.");
         }
 
         [Test]
-        public void VerifyAllLabelsText()
+        public void VerifyLabelsText()
         {
             foreach (var label in Configuration.ExpectedLabels)
             {
@@ -42,7 +42,7 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void VerifyErrorRequiredFieldMessages()
+        public void VerifyErrorMessagesForRequiredField()
         {
             _contactFormPage.ClickContactSalesBtn();
             foreach (var field in Configuration.ExpectedErrorMessages)
@@ -53,7 +53,7 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void VerifyDefaultDropdownValues()
+        public void VerifyDefaultValuesForDropdowns()
         {
             foreach (var dropdown in Configuration.ExpectedDropdownDefaults)
             {
@@ -75,7 +75,7 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void VerifyDefaultDropdownValuesDisplayedForCountriesWithStates()
+        public void VerifyDefaultDropdownValuesForCountriesWithStates()
         {
             foreach (var country in Configuration.CountriesWithStateDropdownLabels)
             {
@@ -96,7 +96,7 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void VerifyStateFieldNotDisplayedForCountriesWithoutStates()
+        public void VerifyStateDropdownNotDisplayedForCountriesWithoutStates()
         {
             foreach (var country in Configuration.CountriesWithoutStateDropdown)
             {
