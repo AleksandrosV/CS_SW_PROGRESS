@@ -1,8 +1,26 @@
-﻿namespace CS_SW_PROGRESS.Pages
+﻿using Bogus;
+
+namespace CS_SW_PROGRESS.Pages
 {
-    public static class Configuration
+    public static class TestData
     {
         public const string ContactFormHeader = "How Can We Help?";
+        public const string ThankYouUrl = "https://www.progress.com/company/contact-thank-you";
+        public const string ThankYouMessage = "Thanks!\r\nWe received your request.";
+
+        public static Dictionary<string, string> GenerateContactFormData()
+        {
+            var faker = new Faker();
+            return new Dictionary<string, string>
+            {
+                { "FirstName", faker.Name.FirstName() },
+                { "LastName", faker.Name.LastName() },
+                { "Email", "test@progress.com" },
+                { "Company", faker.Company.CompanyName() },
+                { "Phone", faker.Phone.PhoneNumber() },
+                { "Message", faker.Lorem.Paragraph() }
+            };
+        }
 
         public static readonly Dictionary<string, string> ExpectedLabels = new()
         {
@@ -97,6 +115,5 @@
             { "Privacy Policy", "https://www.progress.com/legal/privacy-policy" },
             { "here", "https://forms.progress.com/SubscriptionMgt-English" }
         };
-
     }
 }

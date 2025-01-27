@@ -1,5 +1,6 @@
 ﻿using CS_SW_PROGRESS.Pages;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 namespace CS_SW_PROGRESS.Tests
 {
     public class ContactFormTests : TestBase
@@ -17,13 +18,13 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyHeaderText()
         {
             string actualHeaderText = _contactFormPage.GetHeaderText();
-            Assert.That(actualHeaderText, Is.EqualTo(Configuration.ContactFormHeader), $"The header text does not match the expected '{Configuration.ContactFormHeader}'.");
+            Assert.That(actualHeaderText, Is.EqualTo(TestData.ContactFormHeader), $"The header text does not match the expected '{TestData.ContactFormHeader}'.");
         }
 
         [Test]
         public void VerifyLabelsText()
         {
-            foreach (var label in Configuration.ExpectedLabels)
+            foreach (var label in TestData.ExpectedLabels)
             {
                 string actualLabelText = _contactFormPage.GetLabelText(label.Key);
                 Assert.That(actualLabelText, Is.EqualTo(label.Value), $"The label text for '{label.Key}' does not match the expected '{label.Value}'.");
@@ -33,7 +34,7 @@ namespace CS_SW_PROGRESS.Tests
         [Test]
         public void VerifyLabelsHaveRequiredClass()
         {
-            foreach (var field in Configuration.RequiredFields)
+            foreach (var field in TestData.RequiredFields)
             {
                 string forAttribute = field.Value;
                 bool isLabelRequired = _contactFormPage.IsLabelRequired(forAttribute);
@@ -45,7 +46,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyErrorMessagesForRequiredField()
         {
             _contactFormPage.ClickContactSalesBtn();
-            foreach (var field in Configuration.ExpectedErrorMessages)
+            foreach (var field in TestData.ExpectedErrorMessages)
             {
                 string actualErrorMessage = _contactFormPage.GetErrorMessage(field.Value);
                 Assert.That(actualErrorMessage, Is.EqualTo(field.Value), $"The error message for '{field.Key}' does not match the expected '{field.Value}'.");
@@ -71,7 +72,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyDropdownsOptions(string dropdown, string name)
         {
             List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown));
-            CollectionAssert.AreEqual(Configuration.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for dropdown '{name}' do not match the expected options.");
+            CollectionAssert.AreEqual(TestData.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for dropdown '{name}' do not match the expected options.");
         }
 
         [Test]
@@ -92,7 +93,7 @@ namespace CS_SW_PROGRESS.Tests
         {
             _contactFormPage.SelectCountry(country);
             List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown));
-            CollectionAssert.AreEqual(Configuration.StateOptions[country], actualOptions, $"The options for the 'State' dropdown when '{country}' is selected do not match the expected options.");
+            CollectionAssert.AreEqual(TestData.StateOptions[country], actualOptions, $"The options for the 'State' dropdown when '{country}' is selected do not match the expected options.");
         }
 
         [Test]
@@ -119,7 +120,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyDisclaimerLinks()
         {
             _contactFormPage.SelectRandomCountry();
-            foreach (var link in Configuration.DisclaimerLinks)
+            foreach (var link in TestData.DisclaimerLinks)
             {
                 string linkText = link.Key;
                 string expectedUrl = link.Value;
@@ -130,6 +131,22 @@ namespace CS_SW_PROGRESS.Tests
                 Driver.Close();
                 Driver.SwitchTo().Window(Driver.WindowHandles.First());
             }
+        }
+
+        [Test]
+        public void SubmitValidContactForm()
+        {
+            var data = TestData.GenerateContactFormData();
+            _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            WebDriverWait wait = new(Driver, TimeSpan.FromSeconds(10));
+            wait.Until(d => d.Url.Contains(TestData.ThankYouUrl));
+            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
+            var successMessage = wait.Until(d => d.FindElement(By.CssSelector("h1.-mb4")));
+            Assert.Multiple(() =>
+            {
+                Assert.That(successMessage.Displayed, Is.True, "The success message is not displayed.");
+                Assert.That(successMessage.Text, Is.EqualTo(TestData.ThankYouMessage), "The success message text is incorrect.");
+            });
         }
     }
 }
