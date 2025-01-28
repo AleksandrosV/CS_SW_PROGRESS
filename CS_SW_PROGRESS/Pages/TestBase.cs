@@ -11,15 +11,10 @@ namespace CS_SW_PROGRESS.Pages
         [SetUp]
         public void SetUp()
         {
-            // Initialize ChromeDriver with default options
             var chromeOptions = new ChromeOptions();
             chromeOptions.AddArgument("--start-maximized"); // Open browser in maximized mode
-            chromeOptions.AddArgument("--disable-extensions"); // Disable browser extensions
-            chromeOptions.AddArgument("--disable-popup-blocking"); // Disable popups
             chromeOptions.AddUserProfilePreference("profile.default_content_setting_values.cookies", 2); // Block cookies
-
             Driver = new ChromeDriver(chromeOptions);
-
             // Set an implicit wait for all elements
             Driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
         }

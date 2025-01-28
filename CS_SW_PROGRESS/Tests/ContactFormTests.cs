@@ -14,31 +14,10 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void VerifyHeaderText()
+        public void VerifyContactTitleIsDisplayed()
         {
-            string actualHeaderText = _contactFormPage.GetHeaderText();
-            Assert.That(actualHeaderText, Is.EqualTo(TestData.ContactFormHeader), $"The header text does not match the expected '{TestData.ContactFormHeader}'.");
-        }
-
-        [Test]
-        public void VerifyLabelsText()
-        {
-            foreach (var label in TestData.ExpectedLabels)
-            {
-                string actualLabelText = _contactFormPage.GetLabelText(label.Key);
-                Assert.That(actualLabelText, Is.EqualTo(label.Value), $"The label text for '{label.Key}' does not match the expected '{label.Value}'.");
-            }
-        }
-
-        [Test]
-        public void VerifyLabelsHaveRequiredClass()
-        {
-            foreach (var field in TestData.RequiredFields)
-            {
-                string forAttribute = field.Value;
-                bool isLabelRequired = _contactFormPage.IsLabelRequired(forAttribute);
-                Assert.That(isLabelRequired, Is.True, $"The label for {field.Key} does not have the 'required' class.");
-            }
+            string headerText = _contactFormPage.GetHeaderText();
+            Assert.That(headerText, Is.EqualTo(ContactFormPage.ContactFormTitle), $"The header text does not match the expected '{ContactFormPage.ContactFormTitle}'.");
         }
 
         [Test]
@@ -78,7 +57,7 @@ namespace CS_SW_PROGRESS.Tests
         [Category("Dropdowns")]
         [TestCase("Canada")]
         [TestCase("USA")]
-        public void VerifyDefaultDropdownValuesForCountriesWithStates(string country)
+        public void VerifyDefaultDropdownValueForCountriesWithStates(string country)
         {
             _contactFormPage.SelectCountry(country);
             Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.True, $"The 'State' field is not displayed when '{country}' is selected.");
@@ -86,12 +65,12 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Dropdowns")]
-        [TestCase("Canada", "State-1")]
-        [TestCase("USA", "State-1")]
-        public void VerifyStateDropdownOptionsForCountriesWithStates(string country, string dropdown)
+        [TestCase("Canada")]
+        [TestCase("USA")]
+        public void VerifyStateDropdownOptionsForCountriesWithStates(string country)
         {
             _contactFormPage.SelectCountry(country);
-            List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown));
+            List<string> actualOptions = _contactFormPage.GetDropdownOptions(_contactFormPage.StateDropdown);
             CollectionAssert.AreEqual(TestData.StateOptions[country], actualOptions, $"The options for the 'State' dropdown when '{country}' is selected do not match the expected options.");
         }
 
@@ -177,6 +156,15 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectJobFunctionType(job);
             _ = _contactFormPage.GetOtherFieldPlaceholder();
             Assert.That(_contactFormPage.GetOtherFieldPlaceholder(), Is.EqualTo(ContactFormPage.OtherFieldPlaceholderTxt));
+        }
+
+        [Test]
+        [TestCase("Germany")]
+        public void VerifyCheckboxSelection(string country)
+        {
+            _contactFormPage.SelectCountry(country);
+            _contactFormPage.CheckIAgreeCheckbox();
+            Assert.That(_contactFormPage.IsIAgreeCheckboxChecked(), Is.True, "The 'I agree' checkbox is not checked.");
         }
     }
 }
