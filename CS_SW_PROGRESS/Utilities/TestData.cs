@@ -1,12 +1,19 @@
 ﻿using Bogus;
 using OpenQA.Selenium;
 
-namespace CS_SW_PROGRESS.Pages
+namespace CS_SW_PROGRESS.Utilities
 {
     public static class TestData
     {
         public const string ThankYouUrl = "https://www.progress.com/company/contact-thank-you";
         public static readonly By ThankYouMessage = By.CssSelector("h1.-mb4");
+
+        public static readonly Dictionary<By, string> DropdownDefaultOptions = new()
+        {
+            { By.Id("Dropdown-1"), "Select product" },
+            { By.Id("Country-1"), "Select country/territory" },
+            { By.Id("Dropdown-2"), "Select company type" }
+        };
 
         public static Dictionary<string, string> GenerateContactFormData()
         {
@@ -35,18 +42,18 @@ namespace CS_SW_PROGRESS.Pages
             { "Phone", "Phone is required" }
         };
 
-        public static readonly Dictionary<string, List<string>> ExpectedDropdownOptions = new()
+        public static readonly Dictionary<By, List<string>> ExpectedDropdownOptions = new()
         {
-            { "Dropdown-1", new List<string> {
+            { By.Id("Dropdown-1"), new List<string> {
                 "Select product", "Chef – DevOps", "Professional Services – Consulting", "Corticon – Business Rules", "DataDirect – Secure Data Connectivity & Integration",
                 "Flowmon – Network Performance and Security", "Kemp LoadMaster – Load Balancing", "Kendo UI & Telerik – UI/UX Tools", "MarkLogic Data Platform – Solve Complex Data Challenges",
                 "MOVEit – Secure File Transfer", "OpenEdge – Mission Critical App Platform", "Podio – Project Management & Collaboration", "Semaphore – Smarter Decisions Powered by Metadata",
                 "ShareFile – Document Sharing and Storage", "Sitefinity – Content Management and Digital Experience Platform", "ThemeBuilder – The Powerful Telerik and Kendo UI Styles Builder",
                 "WhatsUp Gold – IT Infrastructure Monitoring", "WS_FTP – Secure FTP Server" } },
-            { "Dropdown-2", new List<string> {
+            { By.Id("Dropdown-2"), new List<string> {
                 "Select company type", "Independent Software Vendor", "Corporation or Government Entity", "Technology System Integrator or Consultancy",
                 "Progress Partner", "Software Reseller", "Technology Service Provider", "Others" } },
-            { "Country-1", new List<string> {
+            { By.Id("Country-1"), new List<string> {
                 "Select country/territory", "USA", "Canada", "Bulgaria", "Germany", "United Kingdom", "Japan", "Australia", "India", "Afghanistan", "Albania",
                 "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Austria",
                 "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina",

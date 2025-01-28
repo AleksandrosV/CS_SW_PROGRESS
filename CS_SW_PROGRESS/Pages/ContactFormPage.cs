@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using CS_SW_PROGRESS.Utilities;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace CS_SW_PROGRESS.Pages
@@ -29,19 +30,6 @@ namespace CS_SW_PROGRESS.Pages
             return GetText(ContactHeaderText);
         }
 
-        public string GetLabelText(string forAttribute)
-        {
-            var labelLocator = By.CssSelector($"label[for='{forAttribute}']");
-            return GetText(labelLocator);
-        }
-
-        public bool IsLabelRequired(string forAttribute)
-        {
-            var labelLocator = By.CssSelector($"label[for='{forAttribute}']");
-            var labelElement = Driver.FindElement(labelLocator);
-            return labelElement.GetAttribute("class").Contains("required");
-        }
-
         public void ClickContactSalesBtn()
         {
             ClickElement(ContactSalesBtn);
@@ -51,13 +39,6 @@ namespace CS_SW_PROGRESS.Pages
         {
             var errorMessageLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']");
             return GetText(errorMessageLocator);
-        }
-
-        public string GetSelectedDropdownValue(By dropdownLocator)
-        {
-            var dropdownElement = Driver.FindElement(dropdownLocator);
-            var selectElement = new SelectElement(dropdownElement);
-            return selectElement.SelectedOption.Text;
         }
 
         public List<string> GetDropdownOptions(By dropdownLocator)
@@ -166,6 +147,12 @@ namespace CS_SW_PROGRESS.Pages
         public bool IsIAgreeCheckboxChecked()
         {
             return Driver.FindElement(IAgreeCheckbox).Selected;
+        }
+
+        public string GetDefaultDropdownOption(By dropdownLocator)
+        {
+            var dropdownElement = new SelectElement(Driver.FindElement(dropdownLocator));
+            return dropdownElement.SelectedOption.Text;
         }
     }
 }

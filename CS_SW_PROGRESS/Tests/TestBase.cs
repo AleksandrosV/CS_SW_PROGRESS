@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
-namespace CS_SW_PROGRESS.Pages
+namespace CS_SW_PROGRESS.Tests
 {
     public class TestBase
     {

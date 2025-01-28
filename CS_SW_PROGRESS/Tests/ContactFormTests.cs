@@ -1,5 +1,5 @@
 ﻿using CS_SW_PROGRESS.Pages;
-using OpenQA.Selenium;
+using CS_SW_PROGRESS.Utilities;
 namespace CS_SW_PROGRESS.Tests
 {
     public class ContactFormTests : TestBase
@@ -33,31 +33,32 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Dropdowns")]
-        [TestCase("Dropdown-1", "Select product", "Product / interest")]
-        [TestCase("Dropdown-2", "Select company type", "I am...")]
-        [TestCase("Country-1", "Select country/territory", "Country/territory")]
-        public void VerifyDefaultValuesForDropdowns(string dropdown, string dropdownDefault, string dropdownName)
+        public void VerifyDefaultSelectedDropdownOptions()
         {
-            string dropdownField = _contactFormPage.GetSelectedDropdownValue(By.Id(dropdown));
-            Assert.That(dropdownField, Is.EqualTo(dropdownDefault), $"The default value for dropdown '{dropdownName}' does not match the expected value.");
+            foreach (var dropdown in TestData.DropdownDefaultOptions)
+            {
+                string actualDefaultOption = _contactFormPage.GetDefaultDropdownOption(dropdown.Key);
+                Assert.That(actualDefaultOption, Is.EqualTo(dropdown.Value), $"Default option for dropdown with locator {dropdown.Key} was expected to be '{dropdown.Value}' but was '{actualDefaultOption}'.");
+            }
         }
 
         [Test]
         [Category("Dropdowns")]
-        [TestCase("Dropdown-1", "Product / interest")]
-        [TestCase("Dropdown-2", "I am...")]
-        [TestCase("Country-1", "Country/Territory")]
-        public void VerifyDropdownsOptions(string dropdown, string name)
+        public void VerifyDropdownsOptions()
         {
-            List<string> actualOptions = _contactFormPage.GetDropdownOptions(By.Id(dropdown));
-            CollectionAssert.AreEqual(TestData.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for dropdown '{name}' do not match the expected options.");
+            foreach (var dropdown in TestData.ExpectedDropdownOptions)
+            {
+                List<string> expectedOptions = dropdown.Value;
+                List<string> actualOptions = _contactFormPage.GetDropdownOptions(dropdown.Key);
+                CollectionAssert.AreEqual(expectedOptions, actualOptions, $"The options for dropdown '{dropdown.Key}' do not match the expected options.");
+            }
         }
 
         [Test]
         [Category("Dropdowns")]
         [TestCase("Canada")]
         [TestCase("USA")]
-        public void VerifyDefaultDropdownValueForCountriesWithStates(string country)
+        public void VerifyStateDropdownIsDysplayedForCountriesWithStates(string country)
         {
             _contactFormPage.SelectCountry(country);
             Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.True, $"The 'State' field is not displayed when '{country}' is selected.");
