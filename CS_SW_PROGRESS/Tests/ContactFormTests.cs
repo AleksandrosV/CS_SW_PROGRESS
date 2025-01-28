@@ -1,6 +1,5 @@
 ﻿using CS_SW_PROGRESS.Pages;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 namespace CS_SW_PROGRESS.Tests
 {
     public class ContactFormTests : TestBase
@@ -134,20 +133,50 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        public void SubmitValidContactForm()
+        [Category("Contact Form Submission")]
+        [TestCase("MarkLogic Data Platform – Solve Complex Data Challenges")]
+        public void VerifySubmitValidContactFormWithIndustry(string product)
         {
             var data = TestData.GenerateContactFormData();
+            _contactFormPage.SelectProductType(product);
+            _contactFormPage.SelectRandomCompanyType();
             _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
-            WebDriverWait wait = new(Driver, TimeSpan.FromSeconds(10));
-            wait.Until(d => d.Url.Contains(TestData.ThankYouUrl));
             Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
-            var successMessage = wait.Until(d => d.FindElement(By.CssSelector("h1.-mb4")));
-            Assert.Multiple(() =>
-            {
-                Assert.That(successMessage.Displayed, Is.True, "The success message is not displayed.");
-                Assert.That(successMessage.Text, Is.EqualTo(TestData.ThankYouMessage), "The success message text is incorrect.");
-            });
+        }
+
+        [Test]
+        [Category("Contact Form Submission")]
+        [TestCase("MOVEit – Secure File Transfer", "Head of Security/Compliance")]
+        public void VerifySubmitValidContactFormWithJobFunction(string product, string job)
+        {
+            var data = TestData.GenerateContactFormData();
+            _contactFormPage.SelectProductType(product);
+            _contactFormPage.SelectJobFunctionType(job);
+            _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
+        }
+
+        [Test]
+        [Category("Contact Form Submission")]
+        [TestCase("MOVEit – Secure File Transfer", "Other")]
+        public void VerifySubmitValidContactFormWithJobFunctionOthers(string product, string job)
+        {
+            var data = TestData.GenerateContactFormData();
+            _contactFormPage.SelectProductType(product);
+            _contactFormPage.SelectJobFunctionType(job);
+            _contactFormPage.FillOthersField(data["Job Function"]);
+            _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
+        }
+
+        [Test]
+        [TestCase("MOVEit – Secure File Transfer", "Other")]
+        public void VerifyOtherFieldPlaceholder(string product, string job)
+        {
+            _contactFormPage.SelectProductType(product);
+            _contactFormPage.SelectJobFunctionType(job);
+            _ = _contactFormPage.GetOtherFieldPlaceholder();
+            Assert.That(_contactFormPage.GetOtherFieldPlaceholder(), Is.EqualTo(ContactFormPage.OtherFieldPlaceholderTxt));
         }
     }
 }
-

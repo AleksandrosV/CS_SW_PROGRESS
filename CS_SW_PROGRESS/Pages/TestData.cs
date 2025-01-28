@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using OpenQA.Selenium;
 
 namespace CS_SW_PROGRESS.Pages
 {
@@ -6,7 +7,7 @@ namespace CS_SW_PROGRESS.Pages
     {
         public const string ContactFormHeader = "How Can We Help?";
         public const string ThankYouUrl = "https://www.progress.com/company/contact-thank-you";
-        public const string ThankYouMessage = "Thanks!\r\nWe received your request.";
+        public static readonly By ThankYouMessage = By.CssSelector("h1.-mb4");
 
         public static Dictionary<string, string> GenerateContactFormData()
         {
@@ -18,7 +19,8 @@ namespace CS_SW_PROGRESS.Pages
                 { "Email", "test@progress.com" },
                 { "Company", faker.Company.CompanyName() },
                 { "Phone", faker.Phone.PhoneNumber() },
-                { "Message", faker.Lorem.Paragraph() }
+                { "Message", faker.Lorem.Paragraph() },
+                { "Job Function", faker.Name.JobTitle() }
             };
         }
 
@@ -45,7 +47,9 @@ namespace CS_SW_PROGRESS.Pages
             { "I Am Dropdown", "Dropdown-2" },
             { "Country Dropdown", "Country-1" },
             { "State Dropdown", "State-1" },
-            { "Phone Field", "Textbox-5" }
+            { "Phone Field", "Textbox-5" },
+            { "Industry Dropdown", "TaxonomiesListField-1" },
+            { "Job Function Dropdown", "Dropdown-3" }
         };
 
         public static readonly Dictionary<string, string> ExpectedErrorMessages = new()

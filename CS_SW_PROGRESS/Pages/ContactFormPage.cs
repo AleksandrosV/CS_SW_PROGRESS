@@ -1,27 +1,30 @@
-﻿using Bogus;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
 namespace CS_SW_PROGRESS.Pages
 {
     public class ContactFormPage(IWebDriver driver) : BasePage(driver)
     {
-        private readonly By productDropdown = By.Id("Dropdown-1");
-        private readonly By businessEmailField = By.Id("Email-1");
-        private readonly By firstNameField = By.Id("Textbox-1");
-        private readonly By lastNameField = By.Id("Textbox-2");
-        private readonly By companyField = By.Id("Textbox-3");
-        private readonly By iAmDropdown = By.Id("Dropdown-2");
-        private readonly By countryDropdown = By.Id("Country-1");
-        private readonly By phoneField = By.Id("Textbox-5");
-        private readonly By stateDropdown = By.Id("State-1");
-        private readonly By messageField = By.Id("Textarea-1");
-        private readonly By contactSalesBtn = By.CssSelector("button[type='submit']");
-        private readonly By headerText = By.CssSelector("h1.-mb2.-tac");
+        private readonly By ProductDropdown = By.Id("Dropdown-1");
+        private readonly By BusinessEmailField = By.Id("Email-1");
+        private readonly By FirstNameField = By.Id("Textbox-1");
+        private readonly By LastNameField = By.Id("Textbox-2");
+        private readonly By CompanyField = By.Id("Textbox-3");
+        private readonly By IAmDropdown = By.Id("Dropdown-2");
+        private readonly By CountryDropdown = By.Id("Country-1");
+        private readonly By PhoneField = By.Id("Textbox-5");
+        private readonly By StateDropdown = By.Id("State-1");
+        private readonly By MessageField = By.Id("Textarea-1");
+        private readonly By ContactSalesBtn = By.CssSelector("button[type='submit']");
+        private readonly By ContactHeaderText = By.CssSelector("h1.-mb2.-tac");
+        private readonly By IndustryDropdown = By.Id("TaxonomiesListField-1");
+        private readonly By JobFunctionDropdown = By.Id("Dropdown-3");
+        private readonly By OthersField = By.Id("Textbox-4");
+        public const string OtherFieldPlaceholderTxt = "e.g. Security Officer";
 
         public string GetHeaderText()
         {
-            return GetText(headerText);
+            return GetText(ContactHeaderText);
         }
 
         public string GetLabelText(string forAttribute)
@@ -39,7 +42,7 @@ namespace CS_SW_PROGRESS.Pages
 
         public void ClickContactSalesBtn()
         {
-            ClickElement(contactSalesBtn);
+            ClickElement(ContactSalesBtn);
         }
 
         public string GetErrorMessage(string forAttribute)
@@ -71,41 +74,41 @@ namespace CS_SW_PROGRESS.Pages
 
         public void SelectCountry(string country)
         {
-            SelectDropdownValue(countryDropdown, country);
+            SelectDropdownValue(CountryDropdown, country);
         }
 
         public bool IsStateDropdownDisplayed()
         {
-            return IsElementDisplayed(stateDropdown);
+            return IsElementDisplayed(StateDropdown);
         }
 
         public string GetPhoneNumberCode()
         {
-            return Driver.FindElement(phoneField).GetAttribute("value");
+            return Driver.FindElement(PhoneField).GetAttribute("value");
         }
 
         public void SelectRandomCountry()
         {
-            var countryOptions = GetDropdownOptions(countryDropdown);
+            var countryOptions = GetDropdownOptions(CountryDropdown);
             Random random = new();
-            string randomCountry = countryOptions[random.Next(1, countryOptions.Count)];
-            SelectDropdownValue(countryDropdown, randomCountry);
-        }
-
-        public void SelectRandomProduct()
-        {
-            var productOptions = GetDropdownOptions(productDropdown);
-            Random random = new();
-            string randomProduct = productOptions[random.Next(1, Math.Min(7, productOptions.Count))];
-            SelectDropdownValue(productDropdown, randomProduct);
+            string randomCountry = countryOptions[random.Next(3, countryOptions.Count)];
+            SelectDropdownValue(CountryDropdown, randomCountry);
         }
 
         public void SelectRandomCompanyType()
         {
-            var companyTypeOptions = GetDropdownOptions(iAmDropdown);
+            var companyTypeOptions = GetDropdownOptions(IAmDropdown);
             Random random = new();
             string randomCompanyType = companyTypeOptions[random.Next(1, companyTypeOptions.Count)];
-            SelectDropdownValue(iAmDropdown, randomCompanyType);
+            SelectDropdownValue(IAmDropdown, randomCompanyType);
+        }
+
+        public void SelectRandomIndustyType()
+        {
+            var industryTypeOptions = GetDropdownOptions(IndustryDropdown);
+            Random random = new();
+            string randomIndustryType = industryTypeOptions[random.Next(1, industryTypeOptions.Count)];
+            SelectDropdownValue(IndustryDropdown, randomIndustryType);
         }
 
         public void ClickDisclaimerLink(string linkText)
@@ -116,16 +119,41 @@ namespace CS_SW_PROGRESS.Pages
 
         public void SubmitContactForm(string firstName, string lastName, string email, string company, string phone, string message)
         {
-            EnterText(firstNameField, firstName);
-            EnterText(lastNameField, lastName);
-            EnterText(businessEmailField, email);
-            EnterText(companyField, company);
-            EnterText(phoneField, phone);
-            EnterText(messageField, message);
-            SelectRandomCompanyType();
+            EnterText(FirstNameField, firstName);
+            EnterText(LastNameField, lastName);
+            EnterText(BusinessEmailField, email);
+            EnterText(CompanyField, company);
+            EnterText(PhoneField, phone);
+            EnterText(MessageField, message);
+            SelectRandomIndustyType();
             SelectRandomCountry();
-            SelectRandomProduct();
             ClickContactSalesBtn();
+            WaitForThankYouMessage();
+        }
+
+        public void WaitForThankYouMessage()
+        {
+            WaitForElement(TestData.ThankYouMessage);
+        }
+
+        public void SelectProductType(string product)
+        {
+            SelectDropdownValue(ProductDropdown, product);
+        }
+
+        public void SelectJobFunctionType(string job)
+        {
+            SelectDropdownValue(JobFunctionDropdown, job);
+        }
+
+        public void FillOthersField(string text)
+        {
+            EnterText(OthersField, text);
+        }
+
+        public string GetOtherFieldPlaceholder()
+        {
+            return Driver.FindElement(OthersField).GetAttribute("placeholder");
         }
     }
 }
