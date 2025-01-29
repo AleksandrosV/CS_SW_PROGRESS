@@ -43,5 +43,11 @@ namespace CS_SW_PROGRESS.Pages
                 return false;
             }
         }
+        protected void SelectDropdownValue(By dropdownLocator, string value)
+        {
+            var dropdownElement = Driver.FindElement(dropdownLocator);
+            var selectElement = new SelectElement(dropdownElement);
+            selectElement.SelectByText(value);
+        }
     }
 }

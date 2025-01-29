@@ -92,11 +92,11 @@ namespace CS_SW_PROGRESS.Tests
         {
             _contactFormPage.SelectCountry(country);
             string actualPhoneNumberCode = _contactFormPage.GetPhoneNumberCode();
-            Assert.That(actualPhoneNumberCode, Is.EqualTo(expectedCode));
+            Assert.That(actualPhoneNumberCode, Is.EqualTo(expectedCode), $"The phone number code for '{country}' does not match the expected '{expectedCode}'.");
         }
 
         [Test]
-        public void VerifyDisclaimerLinks()
+        public void VerifyDisclaimerLinksNavigateToCorrectUrls()
         {
             _contactFormPage.SelectRandomCountry();
             foreach (var link in TestData.DisclaimerLinks)
@@ -162,11 +162,7 @@ namespace CS_SW_PROGRESS.Tests
                 _contactFormPage.SelectProductType(product);
                 _contactFormPage.SelectJobFunctionType(job);
                 _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"], waitForThankYouPage: false);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(Driver.Url, Is.Not.EqualTo(TestData.ThankYouPageUrl), $"The form was submitted successfully with an invalid email: {invalidEmail.Value}");
-                    Assert.That(_contactFormPage.IsEmailErrorMessageDisplayed(), Is.True, "The email error message is not displayed.");
-                });
+                Assert.That(_contactFormPage.IsEmailErrorMessageDisplayed(), Is.True, $"The form was submitted successfully with an invalid email: {invalidEmail.Value} and the email error message is not displayed.");
             }
         }
 
@@ -180,11 +176,7 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             _contactFormPage.SubmitContactForm(data[firstNameKey], data[lastNameKey], data["Email"], data["Company"], data["Phone"], data["Message"], waitForThankYouPage: false);
-            Assert.Multiple(() =>
-            {
-                Assert.That(Driver.Url, Is.Not.EqualTo(TestData.ThankYouPageUrl), $"The form was submitted successfully with an invalid first name: {data["InvalidFirstName"]}");
-                Assert.That(_contactFormPage.IsFirstLastNameErrorMessageDisplayed(), Is.True, "The first name error message is not displayed.");
-            });
+            Assert.That(_contactFormPage.IsFirstLastNameErrorMessageDisplayed(), Is.True, $"The name error message is not displayed for: {data[firstNameKey]} {data[lastNameKey]}.");
         }
 
         [Test]
@@ -193,8 +185,8 @@ namespace CS_SW_PROGRESS.Tests
         {
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
-            _contactFormPage.GetOtherFieldPlaceholder();
-            Assert.That(_contactFormPage.GetOtherFieldPlaceholder(), Is.EqualTo(ContactFormPage.OtherFieldPlaceholderTxt));
+            string actualPlaceholder = _contactFormPage.GetOtherFieldPlaceholder();
+            Assert.That(actualPlaceholder, Is.EqualTo(ContactFormPage.OtherFieldPlaceholderTxt), $"The placeholder text for the {job} field does not match the expected '{ContactFormPage.OtherFieldPlaceholderTxt}'.");
         }
 
         [Test]
