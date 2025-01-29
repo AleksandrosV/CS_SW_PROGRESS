@@ -22,8 +22,11 @@ namespace CS_SW_PROGRESS.Pages
         public readonly By JobFunctionDropdown = By.Id("Dropdown-3");
         public readonly By OthersField = By.Id("Textbox-4");
         public readonly By IAgreeCheckbox = By.XPath("//input[@name='ElectricMessageOptOut']");
+        public readonly By EmailIvalidErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid email format']");
+        public readonly By FistLastNameErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid format']");
         public const string OtherFieldPlaceholderTxt = "e.g. Security Officer";
         public const string ContactFormTitle = "How Can We Help?";
+
 
         public string GetHeaderText()
         {
@@ -39,6 +42,16 @@ namespace CS_SW_PROGRESS.Pages
         {
             var errorMessageLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']");
             return GetText(errorMessageLocator);
+        }
+
+        public bool IsEmailErrorMessageDisplayed()
+        {
+            return IsElementDisplayed(EmailIvalidErrorMessage);
+        }
+
+        public bool IsFirstLastNameErrorMessageDisplayed()
+        {
+            return IsElementDisplayed(FistLastNameErrorMessage);
         }
 
         public List<string> GetDropdownOptions(By dropdownLocator)
@@ -100,7 +113,7 @@ namespace CS_SW_PROGRESS.Pages
             ClickElement(linkLocator);
         }
 
-        public void SubmitContactForm(string firstName, string lastName, string email, string company, string phone, string message)
+        public void SubmitContactForm(string firstName, string lastName, string email, string company, string phone, string message, bool waitForThankYouPage = true)
         {
             EnterText(FirstNameField, firstName);
             EnterText(LastNameField, lastName);
@@ -111,12 +124,16 @@ namespace CS_SW_PROGRESS.Pages
             SelectRandomIndustyType();
             SelectRandomCountry();
             ClickContactSalesBtn();
-            WaitForThankYouMessage();
+            if (waitForThankYouPage)
+            {
+                WaitForThankYouPage();
+            }
         }
 
-        public void WaitForThankYouMessage()
+        public void WaitForThankYouPage(int timeout = 10)
         {
-            WaitForElement(TestData.ThankYouMessage);
+            var wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(timeout));
+            wait.Until(drv => drv.Url == TestData.ThankYouPageUrl);
         }
 
         public void SelectProductType(string product)

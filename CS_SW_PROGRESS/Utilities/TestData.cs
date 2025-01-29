@@ -5,8 +5,7 @@ namespace CS_SW_PROGRESS.Utilities
 {
     public static class TestData
     {
-        public const string ThankYouUrl = "https://www.progress.com/company/contact-thank-you";
-        public static readonly By ThankYouMessage = By.CssSelector("h1.-mb4");
+        public const string ThankYouPageUrl = "https://www.progress.com/company/contact-thank-you";
 
         public static readonly Dictionary<By, string> DropdownDefaultOptions = new()
         {
@@ -26,7 +25,25 @@ namespace CS_SW_PROGRESS.Utilities
                 { "Company", faker.Company.CompanyName() },
                 { "Phone", faker.Phone.PhoneNumber() },
                 { "Message", faker.Lorem.Paragraph() },
-                { "Job Function", faker.Name.JobTitle() }
+                { "Job Function", faker.Name.JobTitle() },
+                { "InvalidFirstName", $"{faker.Name.FirstName()}{faker.Random.String2(10, "~!@#$%^&*()-_=+")}" },
+                { "InvalidLastName", $"{faker.Name.LastName()}{faker.Random.String2(10, "~!@#$%^&*()-_=+")}"}
+            };
+        }
+
+        public static Dictionary<string, string> InvalidEmailData()
+        {
+            var faker = new Faker();
+            return new Dictionary<string, string>
+            {
+                { "withoutAddressSign", $"{faker.Name.FirstName()}progress.com" },
+                { "incompleteTopLevelDomain", $"{faker.Name.FirstName()}@progress" },
+                { "emptyDomain", $"{faker.Name.FirstName()}@" },
+                { "emptyString", "@progress" },
+                { "emptySpaces", $" {faker.Name.FirstName()} @ progress.com" },
+                { "onlyDomainName", "@progress.com" },
+                { "withTwoDots", $"{faker.Name.FirstName()}@progress..com" },
+                { "withTwo@Symbols", $"{faker.Name.FirstName()}@@progress.com" }
             };
         }
 

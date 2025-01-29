@@ -113,7 +113,7 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        [Category("Contact Form Submission")]
+        [Category("Contact Form Valid Submission")]
         [TestCase("MarkLogic Data Platform – Solve Complex Data Challenges")]
         public void VerifySubmitValidContactFormWithIndustry(string product)
         {
@@ -121,32 +121,70 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectRandomCompanyType();
             _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
-            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
+            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
         }
 
         [Test]
-        [Category("Contact Form Submission")]
-        [TestCase("MOVEit – Secure File Transfer", "Head of Security/Compliance")]
+        [Category("Contact Form Valid Submission")]
+        [TestCase("MOVEit – Secure File Transfer", "System Administrator")]
         public void VerifySubmitValidContactFormWithJobFunction(string product, string job)
         {
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
-            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
+            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
         }
 
         [Test]
-        [Category("Contact Form Submission")]
+        [Category("Contact Form Valid Submission")]
         [TestCase("MOVEit – Secure File Transfer", "Other")]
-        public void VerifySubmitValidContactFormWithJobFunctionOthers(string product, string job)
+        public void VerifySubmitValidContactFormWithJobFunctionOther(string product, string job)
         {
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             _contactFormPage.FillOthersField(data["Job Function"]);
             _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
-            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouUrl), "The URL redirection is incorrect.");
+            Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
+        }
+
+        [Test]
+        [Category("Contact Form Invalid Submission")]
+        [TestCase("MOVEit – Secure File Transfer", "Head of Security/Compliance")]
+        public void VerifyInvalidEmailSubmission(string product, string job)
+        {
+            var invalidEmails = TestData.InvalidEmailData();
+            foreach (var invalidEmail in invalidEmails)
+            {
+                var data = TestData.GenerateContactFormData();
+                data["Email"] = invalidEmail.Value;
+                _contactFormPage.SelectProductType(product);
+                _contactFormPage.SelectJobFunctionType(job);
+                _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"], waitForThankYouPage: false);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(Driver.Url, Is.Not.EqualTo(TestData.ThankYouPageUrl), $"The form was submitted successfully with an invalid email: {invalidEmail.Value}");
+                    Assert.That(_contactFormPage.IsEmailErrorMessageDisplayed(), Is.True, "The email error message is not displayed.");
+                });
+            }
+        }
+
+        [Test]
+        [Category("Contact Form Invalid Submission")]
+        [TestCase("MOVEit – Secure File Transfer", "IT Director/Executive", "InvalidFirstName", "LastName")]
+        [TestCase("MOVEit – Secure File Transfer", "Solution Architect", "FirstName", "InvalidLastName")]
+        public void VerifyInvalidFirstLastNameSubmission(string product, string job, string firstNameKey, string lastNameKey)
+        {
+            var data = TestData.GenerateContactFormData();
+            _contactFormPage.SelectProductType(product);
+            _contactFormPage.SelectJobFunctionType(job);
+            _contactFormPage.SubmitContactForm(data[firstNameKey], data[lastNameKey], data["Email"], data["Company"], data["Phone"], data["Message"], waitForThankYouPage: false);
+            Assert.Multiple(() =>
+            {
+                Assert.That(Driver.Url, Is.Not.EqualTo(TestData.ThankYouPageUrl), $"The form was submitted successfully with an invalid first name: {data["InvalidFirstName"]}");
+                Assert.That(_contactFormPage.IsFirstLastNameErrorMessageDisplayed(), Is.True, "The first name error message is not displayed.");
+            });
         }
 
         [Test]
@@ -155,7 +193,7 @@ namespace CS_SW_PROGRESS.Tests
         {
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
-            _ = _contactFormPage.GetOtherFieldPlaceholder();
+            _contactFormPage.GetOtherFieldPlaceholder();
             Assert.That(_contactFormPage.GetOtherFieldPlaceholder(), Is.EqualTo(ContactFormPage.OtherFieldPlaceholderTxt));
         }
 
