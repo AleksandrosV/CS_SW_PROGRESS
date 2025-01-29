@@ -26,6 +26,7 @@ Welcome to the The Progress project! This project automates UI testing of the Pr
 - **Visual Studio** (2022)
 - **Chrome Browser**
 - **Git**
+- **.net 8.0 or higher**
 - The following NuGet packages:
   - `Bogus`
   - `coverlet.collector`
