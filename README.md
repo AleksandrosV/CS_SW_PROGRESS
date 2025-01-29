@@ -3,7 +3,7 @@
 
 ## Project Overview
 
-Welcome to the The Progress project! This project automates UI testing of the Progress contact form using [C#](https://dotnet.microsoft.com/en-us/languages/csharp), [Selenium WebDriver](https://www.selenium.dev/documentation/webdriver/), and the **Page Object Model** design pattern.
+Welcome to the The Progress project! This project automates UI testing of the [Progress](https://www.progress.com/company/contact) contact form using [C#](https://dotnet.microsoft.com/en-us/languages/csharp), [Selenium WebDriver](https://www.selenium.dev/documentation/webdriver/), and the **Page Object Model** design pattern.
 
 ## Table of Contents
 
