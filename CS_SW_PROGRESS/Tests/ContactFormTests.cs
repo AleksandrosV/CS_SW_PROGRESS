@@ -33,25 +33,37 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Dropdowns")]
-        public void VerifyDefaultSelectedDropdownOptions()
+        [TestCase("Product / interest", "Select product", nameof(ContactFormPage.GetDefaultProductDropdownOption))]
+        [TestCase("Country/Territory", "Select country/territory", nameof(ContactFormPage.GetDefaultCountryDropdownOption))]
+        [TestCase("I am...", "Select company type", nameof(ContactFormPage.GetDefaultCompanyTypeDropdownOption))]
+        public void VerifyDefaultSelectedDropdownOptions(string dropdown, string expectedDefaultOption, string methodName)
         {
-            foreach (var dropdown in TestData.DropdownDefaultOptions)
+            var method = typeof(ContactFormPage).GetMethod(methodName);
+            if (method == null)
             {
-                string actualDefaultOption = _contactFormPage.GetDefaultDropdownOption(dropdown.Key);
-                Assert.That(actualDefaultOption, Is.EqualTo(dropdown.Value), $"Default option for dropdown with locator {dropdown.Key} was expected to be '{dropdown.Value}' but was '{actualDefaultOption}'.");
+                Assert.Fail($"Method '{methodName}' not found in ContactFormPage.");
             }
+            var actualDefaultOption = method?.Invoke(_contactFormPage, null) as string;
+            Assert.That(actualDefaultOption, Is.Not.Null, $"The method '{methodName}' returned null.");
+            Assert.That(actualDefaultOption, Is.EqualTo(expectedDefaultOption), $"Default option for dropdown '{dropdown}' was expected to be '{expectedDefaultOption}' but was '{actualDefaultOption}'.");
         }
 
         [Test]
         [Category("Dropdowns")]
-        public void VerifyDropdownsOptions()
+        [TestCase("Product / interest", nameof(ContactFormPage.GetProducDropdownOptions))]
+        [TestCase("I am...", nameof(ContactFormPage.GetCompanyTypeDropdownOptions))]
+        [TestCase("Country/Territory", nameof(ContactFormPage.GetCountryDropdownOptions))]
+        public void VerifyDropdownsOptions(string dropdown, string methodName)
         {
-            foreach (var dropdown in TestData.ExpectedDropdownOptions)
+            // Use reflection to get the method by name
+            var method = typeof(ContactFormPage).GetMethod(methodName);
+            if (method == null)
             {
-                List<string> expectedOptions = dropdown.Value;
-                List<string> actualOptions = _contactFormPage.GetDropdownOptions(dropdown.Key);
-                CollectionAssert.AreEqual(expectedOptions, actualOptions, $"The options for dropdown '{dropdown.Key}' do not match the expected options.");
+                Assert.Fail($"Method '{methodName}' not found in ContactFormPage.");
             }
+            var actualOptions = method?.Invoke(_contactFormPage, null) as List<string>;
+            Assert.That(actualOptions, Is.Not.Null, $"The method '{methodName}' returned null.");
+            CollectionAssert.AreEqual(TestData.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for the '{dropdown}' dropdown do not match the expected options.");
         }
 
         [Test]

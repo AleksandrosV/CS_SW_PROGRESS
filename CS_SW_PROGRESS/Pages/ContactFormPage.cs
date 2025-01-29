@@ -70,6 +70,34 @@ namespace CS_SW_PROGRESS.Pages
             return dropdownElement.SelectedOption.Text;
         }
 
+        public string GetDefaultProductDropdownOption()
+        {
+            return GetDefaultDropdownOption(ProductDropdown);
+        }
+
+        public string GetDefaultCompanyTypeDropdownOption()
+        {
+            return GetDefaultDropdownOption(IAmDropdown);
+        }
+
+        public string GetDefaultCountryDropdownOption()
+        {
+            return GetDefaultDropdownOption(CountryDropdown);
+        }
+
+        public List<string> GetProducDropdownOptions()
+        {
+            return GetDropdownOptions(ProductDropdown);
+        }
+        public List<string> GetCompanyTypeDropdownOptions()
+        {
+            return GetDropdownOptions(IAmDropdown);
+        }
+        public List<string> GetCountryDropdownOptions()
+        {
+            return GetDropdownOptions(CountryDropdown);
+        }
+
         public List<string> GetStateDropdownOptions()
         {
             return GetDropdownOptions(StateDropdown);
