@@ -50,7 +50,7 @@ Welcome to the The Progress project! This project automates UI testing of the Pr
 
 `dotnet build`
 
-### Running Tests
+## Running Tests
 
 1.Open Visual Studio's Test Explorer and run tests from there.
 2.Alternatively, use the terminal:
