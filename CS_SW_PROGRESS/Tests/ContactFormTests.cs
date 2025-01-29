@@ -17,7 +17,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyContactTitleIsDisplayed()
         {
             string headerText = _contactFormPage.GetHeaderText();
-            Assert.That(headerText, Is.EqualTo("How Can We Help?"), $"The header text does not match the expected.");
+            Assert.That(headerText, Is.EqualTo(TestData.ContactFormTitleTxt), $"The header text does not match the expected.");
         }
 
         [Test]
@@ -33,36 +33,37 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Dropdowns")]
-        [TestCase("Product / interest", "Select product", nameof(ContactFormPage.GetDefaultProductDropdownOption))]
-        [TestCase("Country/Territory", "Select country/territory", nameof(ContactFormPage.GetDefaultCountryDropdownOption))]
-        [TestCase("I am...", "Select company type", nameof(ContactFormPage.GetDefaultCompanyTypeDropdownOption))]
-        public void VerifyDefaultSelectedDropdownOptions(string dropdown, string expectedDefaultOption, string methodName)
+        [TestCase("Product / interest", "Select product")]
+        [TestCase("Country/Territory", "Select country/territory")]
+        [TestCase("I am...", "Select company type")]
+        public void VerifyDefaultSelectedDropdownOptions(string dropdown, string expectedDefaultOption)
         {
-            var method = typeof(ContactFormPage).GetMethod(methodName);
-            if (method == null)
+            string actualDefaultOption = dropdown switch
             {
-                Assert.Fail($"Method '{methodName}' not found in ContactFormPage.");
-            }
-            var actualDefaultOption = method?.Invoke(_contactFormPage, null) as string;
-            Assert.That(actualDefaultOption, Is.Not.Null, $"The method '{methodName}' returned null.");
+                "Product / interest" => _contactFormPage.GetDefaultProductDropdownOption(),
+                "Country/Territory" => _contactFormPage.GetDefaultCountryDropdownOption(),
+                "I am..." => _contactFormPage.GetDefaultCompanyTypeDropdownOption(),
+                _ => throw new ArgumentException($"Unknown dropdown: {dropdown}")
+            };
+
             Assert.That(actualDefaultOption, Is.EqualTo(expectedDefaultOption), $"Default option for dropdown '{dropdown}' was expected to be '{expectedDefaultOption}' but was '{actualDefaultOption}'.");
         }
 
         [Test]
         [Category("Dropdowns")]
-        [TestCase("Product / interest", nameof(ContactFormPage.GetProducDropdownOptions))]
-        [TestCase("I am...", nameof(ContactFormPage.GetCompanyTypeDropdownOptions))]
-        [TestCase("Country/Territory", nameof(ContactFormPage.GetCountryDropdownOptions))]
-        public void VerifyDropdownsOptions(string dropdown, string methodName)
+        [TestCase("Product / interest")]
+        [TestCase("I am...")]
+        [TestCase("Country/Territory")]
+        public void VerifyDropdownsOptions(string dropdown)
         {
-            // Use reflection to get the method by name
-            var method = typeof(ContactFormPage).GetMethod(methodName);
-            if (method == null)
+            List<string> actualOptions = dropdown switch
             {
-                Assert.Fail($"Method '{methodName}' not found in ContactFormPage.");
-            }
-            var actualOptions = method?.Invoke(_contactFormPage, null) as List<string>;
-            Assert.That(actualOptions, Is.Not.Null, $"The method '{methodName}' returned null.");
+                "Product / interest" => _contactFormPage.GetProducDropdownOptions(),
+                "I am..." => _contactFormPage.GetCompanyTypeDropdownOptions(),
+                "Country/Territory" => _contactFormPage.GetCountryDropdownOptions(),
+                _ => throw new ArgumentException($"Unknown dropdown: {dropdown}")
+            };
+
             CollectionAssert.AreEqual(TestData.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for the '{dropdown}' dropdown do not match the expected options.");
         }
 
@@ -165,7 +166,7 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Contact Form Invalid Submission")]
-        [TestCase("MOVEit – Secure File Transfer", "Head of Security/Compliance")]
+        [TestCase("Chef – DevOps", "Head of Security/Compliance")]
         public void VerifyInvalidEmailSubmission(string product, string job)
         {
             var invalidEmails = TestData.InvalidEmailData();
@@ -174,7 +175,8 @@ namespace CS_SW_PROGRESS.Tests
                 var data = TestData.GenerateContactFormData();
                 data["Email"] = invalidEmail.Value;
                 _contactFormPage.SelectProductType(product);
-                _contactFormPage.SelectJobFunctionType(job);
+                _contactFormPage.SelectRandomCountry();
+                _contactFormPage.SelectRandomCompanyType();
                 _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
                 _contactFormPage.SubmitForm(false);
                 Assert.That(_contactFormPage.IsEmailErrorMessageDisplayed(), Is.True, $"The form was submitted successfully with an invalid email: {invalidEmail.Value} and the email error message is not displayed.");
@@ -183,13 +185,14 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Contact Form Invalid Submission")]
-        [TestCase("MOVEit – Secure File Transfer", "IT Director/Executive", "InvalidFirstName", "LastName")]
-        [TestCase("MOVEit – Secure File Transfer", "Solution Architect", "FirstName", "InvalidLastName")]
-        public void VerifyInvalidFirstLastNameSubmission(string product, string job, string firstNameKey, string lastNameKey)
+        [TestCase("Professional Services – Consulting", "InvalidFirstName", "LastName")]
+        [TestCase("Corticon – Business Rules", "FirstName", "InvalidLastName")]
+        public void VerifyInvalidFirstLastNameSubmission(string product, string firstNameKey, string lastNameKey)
         {
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
-            _contactFormPage.SelectJobFunctionType(job);
+            _contactFormPage.SelectRandomCountry();
+            _contactFormPage.SelectRandomCompanyType();
             _contactFormPage.FillContactForm(data[firstNameKey], data[lastNameKey], data["Email"], data["Company"], data["Phone"], data["Message"]);
             _contactFormPage.SubmitForm(false);
             Assert.That(_contactFormPage.IsFirstLastNameErrorMessageDisplayed(), Is.True, $"The name error message is not displayed for: {data[firstNameKey]} {data[lastNameKey]}.");
@@ -202,7 +205,7 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             string actualPlaceholder = _contactFormPage.GetOtherFieldPlaceholder();
-            Assert.That(actualPlaceholder, Is.EqualTo("e.g. Security Officer"), $"The placeholder text for the {job} field does not match the expected.");
+            Assert.That(actualPlaceholder, Is.EqualTo(TestData.OtherFieldPlaceholderTxt), $"The placeholder text for the {job} field does not match the expected.");
         }
 
         [Test]

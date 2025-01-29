@@ -5,6 +5,8 @@ namespace CS_SW_PROGRESS.Utilities
     public static class TestData
     {
         public const string ThankYouPageUrl = "https://www.progress.com/company/contact-thank-you";
+        public const string ContactFormTitleTxt = "How Can We Help?";
+        public const string OtherFieldPlaceholderTxt = "e.g. Security Officer";
 
         public static Dictionary<string, string> GenerateContactFormData()
         {
