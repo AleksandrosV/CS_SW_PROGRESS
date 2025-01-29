@@ -14,7 +14,7 @@ namespace CS_SW_PROGRESS.Pages
         private readonly By IAmDropdown = By.Id("Dropdown-2");
         private readonly By CountryDropdown = By.Id("Country-1");
         private readonly By PhoneField = By.Id("Textbox-5");
-        public readonly By StateDropdown = By.Id("State-1");
+        private readonly By StateDropdown = By.Id("State-1");
         private readonly By MessageField = By.Id("Textarea-1");
         private readonly By ContactSalesBtn = By.CssSelector("button[type='submit']");
         private readonly By ContactHeaderText = By.CssSelector("h1.-mb2.-tac");
@@ -24,8 +24,6 @@ namespace CS_SW_PROGRESS.Pages
         private readonly By IAgreeCheckbox = By.XPath("//input[@name='ElectricMessageOptOut']");
         private readonly By EmailIvalidErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid email format']");
         private readonly By FistLastNameErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid format']");
-        public const string OtherFieldPlaceholderTxt = "e.g. Security Officer";
-        public const string ContactFormTitle = "How Can We Help?";
 
         public void ClickContactSalesBtn()
         {
@@ -70,6 +68,11 @@ namespace CS_SW_PROGRESS.Pages
         {
             var dropdownElement = new SelectElement(Driver.FindElement(dropdownLocator));
             return dropdownElement.SelectedOption.Text;
+        }
+
+        public List<string> GetStateDropdownOptions()
+        {
+            return GetDropdownOptions(StateDropdown);
         }
 
         public bool IsEmailErrorMessageDisplayed()
@@ -123,7 +126,7 @@ namespace CS_SW_PROGRESS.Pages
             SelectDropdownValue(IAmDropdown, randomCompanyType);
         }
 
-        private void SelectRandomIndustyType()
+        public void SelectRandomIndustyType()
         {
             var industryTypeOptions = GetDropdownOptions(IndustryDropdown);
             Random random = new();
@@ -131,7 +134,7 @@ namespace CS_SW_PROGRESS.Pages
             SelectDropdownValue(IndustryDropdown, randomIndustryType);
         }
 
-        public void SubmitContactForm(string firstName, string lastName, string email, string company, string phone, string message, bool waitForThankYouPage = true)
+        public void FillContactForm(string firstName, string lastName, string email, string company, string phone, string message)
         {
             EnterText(FirstNameField, firstName);
             EnterText(LastNameField, lastName);
@@ -139,13 +142,12 @@ namespace CS_SW_PROGRESS.Pages
             EnterText(CompanyField, company);
             EnterText(PhoneField, phone);
             EnterText(MessageField, message);
-            SelectRandomIndustyType();
-            SelectRandomCountry();
+        }
+
+        public void SubmitForm(bool waitForThankYouPage = true)
+        {
             ClickContactSalesBtn();
-            if (waitForThankYouPage)
-            {
-                WaitForThankYouPage();
-            }
+            if (waitForThankYouPage) WaitForThankYouPage();
         }
 
         private void WaitForThankYouPage(int timeout = 10)

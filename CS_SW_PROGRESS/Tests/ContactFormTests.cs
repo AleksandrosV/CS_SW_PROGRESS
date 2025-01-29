@@ -17,7 +17,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyContactTitleIsDisplayed()
         {
             string headerText = _contactFormPage.GetHeaderText();
-            Assert.That(headerText, Is.EqualTo(ContactFormPage.ContactFormTitle), $"The header text does not match the expected '{ContactFormPage.ContactFormTitle}'.");
+            Assert.That(headerText, Is.EqualTo("How Can We Help?"), $"The header text does not match the expected.");
         }
 
         [Test]
@@ -56,12 +56,15 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Dropdowns")]
-        [TestCase("Canada")]
-        [TestCase("USA")]
-        public void VerifyStateDropdownIsDysplayedForCountriesWithStates(string country)
+        [TestCase("Canada", true)]
+        [TestCase("USA", true)]
+        [TestCase("Venezuela", false)]
+        [TestCase("Tuvalu", false)]
+        public void VerifyStateDropdownVisibility(string country, bool shouldBeDisplayed)
         {
             _contactFormPage.SelectCountry(country);
-            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.True, $"The 'State' field is not displayed when '{country}' is selected.");
+            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.EqualTo(shouldBeDisplayed),
+                $"The 'State' field display status for '{country}' was expected to be '{shouldBeDisplayed}', but it was not.");
         }
 
         [Test]
@@ -71,18 +74,8 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyStateDropdownOptionsForCountriesWithStates(string country)
         {
             _contactFormPage.SelectCountry(country);
-            List<string> actualOptions = _contactFormPage.GetDropdownOptions(_contactFormPage.StateDropdown);
+            List<string> actualOptions = _contactFormPage.GetStateDropdownOptions();
             CollectionAssert.AreEqual(TestData.StateOptions[country], actualOptions, $"The options for the 'State' dropdown when '{country}' is selected do not match the expected options.");
-        }
-
-        [Test]
-        [Category("Dropdowns")]
-        [TestCase("Venezuela")]
-        [TestCase("Tuvalu")]
-        public void VerifyStateDropdownNotDisplayedForCountriesWithoutStates(string country)
-        {
-            _contactFormPage.SelectCountry(country);
-            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.False, $"The 'State' field is displayed when '{country}' is selected.");
         }
 
         [Test]
@@ -119,8 +112,11 @@ namespace CS_SW_PROGRESS.Tests
         {
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
+            _contactFormPage.SelectRandomIndustyType();
             _contactFormPage.SelectRandomCompanyType();
-            _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.SelectRandomCountry();
+            _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.SubmitForm();
             Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
         }
 
@@ -132,7 +128,10 @@ namespace CS_SW_PROGRESS.Tests
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
-            _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.SelectRandomCountry();
+            _contactFormPage.SelectRandomIndustyType();
+            _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.SubmitForm();
             Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
         }
 
@@ -144,8 +143,11 @@ namespace CS_SW_PROGRESS.Tests
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
+            _contactFormPage.SelectRandomCountry();
+            _contactFormPage.SelectRandomIndustyType();
             _contactFormPage.FillOthersField(data["Job Function"]);
-            _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.SubmitForm();
             Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
         }
 
@@ -161,7 +163,8 @@ namespace CS_SW_PROGRESS.Tests
                 data["Email"] = invalidEmail.Value;
                 _contactFormPage.SelectProductType(product);
                 _contactFormPage.SelectJobFunctionType(job);
-                _contactFormPage.SubmitContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"], waitForThankYouPage: false);
+                _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
+                _contactFormPage.SubmitForm(false);
                 Assert.That(_contactFormPage.IsEmailErrorMessageDisplayed(), Is.True, $"The form was submitted successfully with an invalid email: {invalidEmail.Value} and the email error message is not displayed.");
             }
         }
@@ -175,7 +178,8 @@ namespace CS_SW_PROGRESS.Tests
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
-            _contactFormPage.SubmitContactForm(data[firstNameKey], data[lastNameKey], data["Email"], data["Company"], data["Phone"], data["Message"], waitForThankYouPage: false);
+            _contactFormPage.FillContactForm(data[firstNameKey], data[lastNameKey], data["Email"], data["Company"], data["Phone"], data["Message"]);
+            _contactFormPage.SubmitForm(false);
             Assert.That(_contactFormPage.IsFirstLastNameErrorMessageDisplayed(), Is.True, $"The name error message is not displayed for: {data[firstNameKey]} {data[lastNameKey]}.");
         }
 
@@ -186,7 +190,7 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             string actualPlaceholder = _contactFormPage.GetOtherFieldPlaceholder();
-            Assert.That(actualPlaceholder, Is.EqualTo(ContactFormPage.OtherFieldPlaceholderTxt), $"The placeholder text for the {job} field does not match the expected '{ContactFormPage.OtherFieldPlaceholderTxt}'.");
+            Assert.That(actualPlaceholder, Is.EqualTo("e.g. Security Officer"), $"The placeholder text for the {job} field does not match the expected.");
         }
 
         [Test]
