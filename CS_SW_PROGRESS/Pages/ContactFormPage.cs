@@ -32,14 +32,12 @@ namespace CS_SW_PROGRESS.Pages
 
         public void ClickDisclaimerLink(string linkText)
         {
-            By linkLocator = By.LinkText(linkText);
-            ClickElement(linkLocator);
+            ClickElement(By.LinkText(linkText));
         }
 
         public string GetErrorMessage(string forAttribute)
         {
-            var errorMessageLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']");
-            return GetText(errorMessageLocator);
+            return GetText(By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']"));
         }
 
         public string GetPhoneNumberCode()
@@ -57,19 +55,6 @@ namespace CS_SW_PROGRESS.Pages
             return Driver.FindElement(OthersField).GetAttribute("placeholder");
         }
 
-        public List<string> GetDropdownOptions(By dropdownLocator)
-        {
-            var dropdownElement = Driver.FindElement(dropdownLocator);
-            var selectElement = new SelectElement(dropdownElement);
-            return selectElement.Options.Select(option => option.Text).ToList();
-        }
-
-        public string GetDefaultDropdownOption(By dropdownLocator)
-        {
-            var dropdownElement = new SelectElement(Driver.FindElement(dropdownLocator));
-            return dropdownElement.SelectedOption.Text;
-        }
-
         public string GetDefaultProductDropdownOption()
         {
             return GetDefaultDropdownOption(ProductDropdown);
@@ -85,14 +70,16 @@ namespace CS_SW_PROGRESS.Pages
             return GetDefaultDropdownOption(CountryDropdown);
         }
 
-        public List<string> GetProducDropdownOptions()
+        public List<string> GetProductDropdownOptions()
         {
             return GetDropdownOptions(ProductDropdown);
         }
+
         public List<string> GetCompanyTypeDropdownOptions()
         {
             return GetDropdownOptions(IAmDropdown);
         }
+
         public List<string> GetCountryDropdownOptions()
         {
             return GetDropdownOptions(CountryDropdown);
@@ -140,26 +127,17 @@ namespace CS_SW_PROGRESS.Pages
 
         public void SelectRandomCountry()
         {
-            var countryOptions = GetDropdownOptions(CountryDropdown);
-            Random random = new();
-            string randomCountry = countryOptions[random.Next(3, countryOptions.Count)];
-            SelectDropdownValue(CountryDropdown, randomCountry);
+            SelectRandomDropdownValue(CountryDropdown, 3);
         }
 
         public void SelectRandomCompanyType()
         {
-            var companyTypeOptions = GetDropdownOptions(IAmDropdown);
-            Random random = new();
-            string randomCompanyType = companyTypeOptions[random.Next(1, companyTypeOptions.Count)];
-            SelectDropdownValue(IAmDropdown, randomCompanyType);
+            SelectRandomDropdownValue(IAmDropdown, 1);
         }
 
-        public void SelectRandomIndustyType()
+        public void SelectRandomIndustryType()
         {
-            var industryTypeOptions = GetDropdownOptions(IndustryDropdown);
-            Random random = new();
-            string randomIndustryType = industryTypeOptions[random.Next(1, industryTypeOptions.Count)];
-            SelectDropdownValue(IndustryDropdown, randomIndustryType);
+            SelectRandomDropdownValue(IndustryDropdown, 1);
         }
 
         public void FillContactForm(string firstName, string lastName, string email, string company, string phone, string message)

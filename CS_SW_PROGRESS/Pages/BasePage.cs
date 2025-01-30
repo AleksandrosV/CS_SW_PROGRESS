@@ -43,11 +43,35 @@ namespace CS_SW_PROGRESS.Pages
                 return false;
             }
         }
-        protected void SelectDropdownValue(By dropdownLocator, string value)
+
+        protected List<string> GetDropdownOptions(By dropdownLocator)
         {
             var dropdownElement = Driver.FindElement(dropdownLocator);
             var selectElement = new SelectElement(dropdownElement);
+            return selectElement.Options.Select(option => option.Text).ToList();
+        }
+
+        protected string GetDefaultDropdownOption(By dropdownLocator)
+        {
+            var selectElement = new SelectElement(Driver.FindElement(dropdownLocator));
+            return selectElement.SelectedOption.Text;
+        }
+
+        protected void SelectDropdownValue(By dropdownLocator, string value)
+        {
+            var selectElement = new SelectElement(Driver.FindElement(dropdownLocator));
             selectElement.SelectByText(value);
+        }
+
+        protected void SelectRandomDropdownValue(By dropdownLocator, int startIndex = 1)
+        {
+            var options = GetDropdownOptions(dropdownLocator);
+            if (options.Count > startIndex)
+            {
+                Random random = new();
+                string randomValue = options[random.Next(startIndex, options.Count)];
+                SelectDropdownValue(dropdownLocator, randomValue);
+            }
         }
     }
 }

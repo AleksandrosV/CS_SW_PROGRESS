@@ -58,7 +58,7 @@ namespace CS_SW_PROGRESS.Tests
         {
             List<string> actualOptions = dropdown switch
             {
-                "Product / interest" => _contactFormPage.GetProducDropdownOptions(),
+                "Product / interest" => _contactFormPage.GetProductDropdownOptions(),
                 "I am..." => _contactFormPage.GetCompanyTypeDropdownOptions(),
                 "Country/Territory" => _contactFormPage.GetCountryDropdownOptions(),
                 _ => throw new ArgumentException($"Unknown dropdown: {dropdown}")
@@ -125,7 +125,7 @@ namespace CS_SW_PROGRESS.Tests
         {
             var data = TestData.GenerateContactFormData();
             _contactFormPage.SelectProductType(product);
-            _contactFormPage.SelectRandomIndustyType();
+            _contactFormPage.SelectRandomIndustryType();
             _contactFormPage.SelectRandomCompanyType();
             _contactFormPage.SelectRandomCountry();
             _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
@@ -142,7 +142,7 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             _contactFormPage.SelectRandomCountry();
-            _contactFormPage.SelectRandomIndustyType();
+            _contactFormPage.SelectRandomIndustryType();
             _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
             _contactFormPage.SubmitForm();
             Assert.That(Driver.Url, Is.EqualTo(TestData.ThankYouPageUrl), "The URL redirection is incorrect.");
@@ -157,7 +157,7 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.SelectProductType(product);
             _contactFormPage.SelectJobFunctionType(job);
             _contactFormPage.SelectRandomCountry();
-            _contactFormPage.SelectRandomIndustyType();
+            _contactFormPage.SelectRandomIndustryType();
             _contactFormPage.FillOthersField(data["Job Function"]);
             _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], data["Message"]);
             _contactFormPage.SubmitForm();
