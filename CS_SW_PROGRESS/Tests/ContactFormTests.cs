@@ -45,7 +45,6 @@ namespace CS_SW_PROGRESS.Tests
                 "I am..." => _contactFormPage.GetDefaultCompanyTypeDropdownOption(),
                 _ => throw new ArgumentException($"Unknown dropdown: {dropdown}")
             };
-
             Assert.That(actualDefaultOption, Is.EqualTo(expectedDefaultOption), $"Default option for dropdown '{dropdown}' was expected to be '{expectedDefaultOption}' but was '{actualDefaultOption}'.");
         }
 
@@ -63,7 +62,6 @@ namespace CS_SW_PROGRESS.Tests
                 "Country/Territory" => _contactFormPage.GetCountryDropdownOptions(),
                 _ => throw new ArgumentException($"Unknown dropdown: {dropdown}")
             };
-
             CollectionAssert.AreEqual(TestData.ExpectedDropdownOptions[dropdown], actualOptions, $"The options for the '{dropdown}' dropdown do not match the expected options.");
         }
 
