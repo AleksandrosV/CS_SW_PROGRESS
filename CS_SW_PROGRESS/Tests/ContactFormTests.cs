@@ -76,8 +76,7 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyStateDropdownVisibility(string country, bool shouldBeDisplayed)
         {
             _contactFormPage.SelectCountry(country);
-            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.EqualTo(shouldBeDisplayed),
-                $"The 'State' field display status for '{country}' was expected to be '{shouldBeDisplayed}', but it was not.");
+            Assert.That(_contactFormPage.IsStateDropdownDisplayed(), Is.EqualTo(shouldBeDisplayed), $"The 'State' field display status for '{country}' was expected to be '{shouldBeDisplayed}', but it was not.");
         }
 
         [Test]
@@ -166,8 +165,8 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Contact Form Invalid Submission")]
-        [TestCase("Chef – DevOps", "Head of Security/Compliance")]
-        public void VerifyInvalidEmailSubmission(string product, string job)
+        [TestCase("Chef – DevOps")]
+        public void VerifyInvalidEmailSubmission(string product)
         {
             var invalidEmails = TestData.InvalidEmailData();
             foreach (var invalidEmail in invalidEmails)
