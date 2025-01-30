@@ -35,11 +35,6 @@ namespace CS_SW_PROGRESS.Pages
             ClickElement(By.LinkText(linkText));
         }
 
-        public string GetErrorMessage(string forAttribute)
-        {
-            return GetText(By.XPath($"//p[@data-sf-role='error-message' and text()='{forAttribute}']"));
-        }
-
         public string GetPhoneNumberCode()
         {
             return Driver.FindElement(PhoneField).GetAttribute("value");
@@ -88,6 +83,12 @@ namespace CS_SW_PROGRESS.Pages
         public List<string> GetStateDropdownOptions()
         {
             return GetDropdownOptions(StateDropdown);
+        }
+
+        public bool IsErrorMessageDisplayed(string errorText)
+        {
+            var errorLocator = By.XPath($"//p[@data-sf-role='error-message' and text()='{errorText}']");
+            return IsElementDisplayed(errorLocator);
         }
 
         public bool IsEmailErrorMessageDisplayed()

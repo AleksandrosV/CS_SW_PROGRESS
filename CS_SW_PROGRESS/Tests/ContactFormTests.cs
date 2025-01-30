@@ -24,10 +24,10 @@ namespace CS_SW_PROGRESS.Tests
         public void VerifyErrorMessagesForRequiredField()
         {
             _contactFormPage.ClickContactSalesBtn();
-            foreach (var field in TestData.ExpectedErrorMessages)
+            foreach (var error in TestData.ExpectedErrorMessages)
             {
-                string actualErrorMessage = _contactFormPage.GetErrorMessage(field.Value);
-                Assert.That(actualErrorMessage, Is.EqualTo(field.Value), $"The error message for '{field.Key}' does not match the expected '{field.Value}'.");
+                bool isDisplayed = _contactFormPage.IsErrorMessageDisplayed(error.Value);
+                Assert.That(isDisplayed, Is.True, $"Missing error message for: {error.Key}. Expected: {error.Value}");
             }
         }
 
