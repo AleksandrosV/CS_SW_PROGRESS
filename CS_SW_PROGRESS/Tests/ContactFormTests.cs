@@ -213,5 +213,17 @@ namespace CS_SW_PROGRESS.Tests
             _contactFormPage.CheckIAgreeCheckbox();
             Assert.That(_contactFormPage.IsIAgreeCheckboxChecked(), Is.True, "The 'I agree' checkbox is not checked.");
         }
+
+        [Test]
+        public void VerifyMessageFieldCharacterCounter()
+        {
+            var data = TestData.GenerateContactFormData();
+            string message = data["Message"];
+            int messageLength = message.Length;
+            _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], message);
+            int remainingCharacters = _contactFormPage.GetMessageFieldCharacterCount();
+            int expectedRemainingCharacters = 2000 - messageLength;
+            Assert.That(remainingCharacters, Is.EqualTo(expectedRemainingCharacters), $"The message field character counter is incorrect. Expected: {expectedRemainingCharacters}, Actual: {remainingCharacters}");
+        }
     }
 }

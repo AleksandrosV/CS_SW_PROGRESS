@@ -35,6 +35,12 @@ namespace CS_SW_PROGRESS.Pages
             ClickElement(By.LinkText(linkText));
         }
 
+        public int GetMessageFieldCharacterCount()
+        {
+            var counterElement = Driver.FindElement(By.CssSelector(".TxtCounter-Number"));
+            return int.Parse(counterElement.Text);
+        }
+
         public string GetPhoneNumberCode()
         {
             return Driver.FindElement(PhoneField).GetAttribute("value");
