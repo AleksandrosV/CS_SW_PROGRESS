@@ -220,9 +220,10 @@ namespace CS_SW_PROGRESS.Tests
             var data = TestData.GenerateContactFormData();
             string message = data["Message"];
             int messageLength = message.Length;
+            int initialCharactersNumber = _contactFormPage.GetMessageFieldCounterNumber();
             _contactFormPage.FillContactForm(data["FirstName"], data["LastName"], data["Email"], data["Company"], data["Phone"], message);
-            int remainingCharacters = _contactFormPage.GetMessageFieldCharacterCount();
-            int expectedRemainingCharacters = 2000 - messageLength;
+            int remainingCharacters = _contactFormPage.GetMessageFieldCounterNumber();
+            int expectedRemainingCharacters = initialCharactersNumber - messageLength;
             Assert.That(remainingCharacters, Is.EqualTo(expectedRemainingCharacters), $"The message field character counter is incorrect. Expected: {expectedRemainingCharacters}, Actual: {remainingCharacters}");
         }
     }
