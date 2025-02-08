@@ -132,7 +132,7 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Contact Form Valid Submission")]
-        [TestCase("MOVEit – Secure File Transfer", "System Administrator")]
+        [TestCase("MOVEit – Secure File Transfer", "Administration")]
         public void VerifySubmitValidContactFormWithJobFunction(string product, string job)
         {
             var data = TestData.GenerateContactFormData();
@@ -147,7 +147,7 @@ namespace CS_SW_PROGRESS.Tests
 
         [Test]
         [Category("Contact Form Valid Submission")]
-        [TestCase("MOVEit – Secure File Transfer", "Other")]
+        [TestCase("MOVEit – Secure File Transfer", "Software Engineering/Development")]
         public void VerifySubmitValidContactFormWithJobFunctionOther(string product, string job)
         {
             var data = TestData.GenerateContactFormData();
@@ -196,7 +196,7 @@ namespace CS_SW_PROGRESS.Tests
         }
 
         [Test]
-        [TestCase("MOVEit – Secure File Transfer", "Other")]
+        [TestCase("MOVEit – Secure File Transfer", "Software Engineering/Development")]
         public void VerifyOtherFieldPlaceholder(string product, string job)
         {
             _contactFormPage.SelectProductType(product);

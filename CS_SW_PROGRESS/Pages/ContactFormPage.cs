@@ -18,8 +18,8 @@ namespace CS_SW_PROGRESS.Pages
         private readonly By MessageField = By.Id("Textarea-1");
         private readonly By ContactSalesBtn = By.CssSelector("button[type='submit']");
         private readonly By ContactHeaderText = By.CssSelector("h1.-mb2.-tac");
-        private readonly By IndustryDropdown = By.Id("TaxonomiesListField-1");
-        private readonly By JobFunctionDropdown = By.Id("Dropdown-3");
+        private readonly By IndustryDropdown = By.Id("TaxonomiesListField-2");
+        private readonly By JobFunctionDropdown = By.Id("TaxonomiesListField-1");
         private readonly By OthersField = By.Id("Textbox-4");
         private readonly By IAgreeCheckbox = By.XPath("//input[@name='ElectricMessageOptOut']");
         private readonly By EmailIvalidErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid email format']");
