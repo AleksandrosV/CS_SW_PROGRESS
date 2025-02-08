@@ -6,21 +6,21 @@ namespace CS_SW_PROGRESS.Pages
 {
     public class ContactFormPage(IWebDriver driver) : BasePage(driver)
     {
-        private readonly By ProductDropdown = By.Id("Dropdown-1");
-        private readonly By BusinessEmailField = By.Id("Email-1");
-        private readonly By FirstNameField = By.Id("Textbox-1");
-        private readonly By LastNameField = By.Id("Textbox-2");
-        private readonly By CompanyField = By.Id("Textbox-3");
-        private readonly By IAmDropdown = By.Id("Dropdown-2");
-        private readonly By CountryDropdown = By.Id("Country-1");
-        private readonly By PhoneField = By.Id("Textbox-5");
-        private readonly By StateDropdown = By.Id("State-1");
-        private readonly By MessageField = By.Id("Textarea-1");
+        private readonly By ProductDropdown = By.XPath("//label[contains(text(), 'Product / interest')]/following-sibling::select");
+        private readonly By BusinessEmailField = By.Name("Email");
+        private readonly By FirstNameField = By.Name("FirstName");
+        private readonly By LastNameField = By.Name("LastName");
+        private readonly By CompanyField = By.Name("CompanyName");
+        private readonly By IAmDropdown = By.Name("JobTitle");
+        private readonly By CountryDropdown = By.Name("Country");
+        private readonly By PhoneField = By.Name("PhoneNumber");
+        private readonly By StateDropdown = By.Name("State");
+        private readonly By MessageField = By.XPath("//label[text()='Message']/following-sibling::textarea");
         private readonly By ContactSalesBtn = By.CssSelector("button[type='submit']");
         private readonly By ContactHeaderText = By.CssSelector("h1.-mb2.-tac");
-        private readonly By IndustryDropdown = By.Id("TaxonomiesListField-2");
-        private readonly By JobFunctionDropdown = By.Id("TaxonomiesListField-1");
-        private readonly By OthersField = By.Id("Textbox-4");
+        private readonly By IndustryDropdown = By.XPath("//label[text()='Industry']/following-sibling::select");
+        private readonly By JobFunctionDropdown = By.XPath("//label[text()='Job Function']/following-sibling::select");
+        private readonly By OthersField = By.XPath("//label[text()='Other']/following-sibling::input");
         private readonly By IAgreeCheckbox = By.XPath("//input[@name='ElectricMessageOptOut']");
         private readonly By EmailIvalidErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid email format']");
         private readonly By FistLastNameErrorMessage = By.XPath("//p[@data-sf-role='error-message' and text()='Invalid format']");
